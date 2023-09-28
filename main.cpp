@@ -19,9 +19,6 @@
 // Source files
 
 int main(int argc,char* argv[]) {
-    
-
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     // data generation of model using T = 10, N = 10, p = 5
     // can be rewritten with generic param, as class+methods or function
@@ -180,8 +177,8 @@ int main(int argc,char* argv[]) {
 
 
 
-    unsigned int n_iter = 100;
-
+    unsigned int n_iter = 1000;
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec);
     a.sample();

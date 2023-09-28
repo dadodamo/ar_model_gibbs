@@ -141,7 +141,6 @@ void ar_model::sample() const {
 
         Eigen::EigenMultivariateNormal<float> beta_sampler(beta_update_mean, beta_update_cov);
         beta = beta_sampler.samples(1);
-        std::cout << "beta: \n" <<  beta << std::endl;
 
         //proto beta
         std::vector<float> beta_vec(beta.data(), beta.data() + beta.rows() * beta.cols());
