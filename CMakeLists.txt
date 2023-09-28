@@ -20,10 +20,23 @@ include_directories(${EIGEN_DIR})
 include_directories(${BOOST_DIR})
 include_directories(${H_FILES})
 
+find_package(Protobuf REQUIRED)
+
+ADD_SUBDIRECTORY(proto)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${Protobuf_INCLUDE_DIRS})
+
 add_executable(ar_gibbs
         main.cpp
         ${H_FILES}/eigenmvn.h
         matern.h
-        coordinates.h dist_sample.cpp
-        gibbs_sampler.h
-        gibbs_sampler.cpp)
+        coordinates/coordinates.h
+        coordinates/coordinates.cpp
+        calc_posterior/posterior.h
+        calc_posterior/posterior.cpp
+        ar_model/ar_class.cpp
+        ar_model/ar_class.h
+        )
+
+TARGET_LINK_LIBRARIES(ar_gibbs proto ${Protobuf_LIBRARIES})

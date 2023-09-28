@@ -1,0 +1,11 @@
+syntax = "proto2";
+package vector;
+
+message vector {
+  required int32 iter = 1;
+  repeated float vec_value = 2;
+}
+
+message full_iter_vec {
+  repeated vector vec_t = 2;
+}

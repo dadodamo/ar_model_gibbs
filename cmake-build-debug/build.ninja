@@ -36,7 +36,7 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /Users/daniel/CLionProjects/ar_gibbs/cmake-build-debug/
+cmake_ninja_workdir = /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/
 # =============================================================================
 # Object build statements for EXECUTABLE target ar_gibbs
 
@@ -44,28 +44,35 @@ cmake_ninja_workdir = /Users/daniel/CLionProjects/ar_gibbs/cmake-build-debug/
 #############################################
 # Order-only phony target for ar_gibbs
 
-build cmake_object_order_depends_target_ar_gibbs: phony || CMakeFiles/ar_gibbs.dir
+build cmake_object_order_depends_target_ar_gibbs: phony || cmake_object_order_depends_target_proto
 
-build CMakeFiles/ar_gibbs.dir/main.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/CLionProjects/ar_gibbs/main.cpp || cmake_object_order_depends_target_ar_gibbs
+build CMakeFiles/ar_gibbs.dir/main.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/main.cpp || cmake_object_order_depends_target_ar_gibbs
   DEP_FILE = CMakeFiles/ar_gibbs.dir/main.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir
 
-build CMakeFiles/ar_gibbs.dir/dist_sample.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/CLionProjects/ar_gibbs/dist_sample.cpp || cmake_object_order_depends_target_ar_gibbs
-  DEP_FILE = CMakeFiles/ar_gibbs.dir/dist_sample.cpp.o.d
+build CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/coordinates/coordinates.cpp || cmake_object_order_depends_target_ar_gibbs
+  DEP_FILE = CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
-  OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir
+  OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/coordinates
 
-build CMakeFiles/ar_gibbs.dir/gibbs_sampler.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/CLionProjects/ar_gibbs/gibbs_sampler.cpp || cmake_object_order_depends_target_ar_gibbs
-  DEP_FILE = CMakeFiles/ar_gibbs.dir/gibbs_sampler.cpp.o.d
+build CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/calc_posterior/posterior.cpp || cmake_object_order_depends_target_ar_gibbs
+  DEP_FILE = CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
-  OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir
+  OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/calc_posterior
+
+build CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/ar_model/ar_class.cpp || cmake_object_order_depends_target_ar_gibbs
+  DEP_FILE = CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
+  OBJECT_DIR = CMakeFiles/ar_gibbs.dir
+  OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/ar_model
 
 
 # =============================================================================
@@ -75,8 +82,9 @@ build CMakeFiles/ar_gibbs.dir/gibbs_sampler.cpp.o: CXX_COMPILER__ar_gibbs_Debug 
 #############################################
 # Link the executable ar_gibbs
 
-build ar_gibbs: CXX_EXECUTABLE_LINKER__ar_gibbs_Debug CMakeFiles/ar_gibbs.dir/main.cpp.o CMakeFiles/ar_gibbs.dir/dist_sample.cpp.o CMakeFiles/ar_gibbs.dir/gibbs_sampler.cpp.o
+build ar_gibbs: CXX_EXECUTABLE_LINKER__ar_gibbs_Debug CMakeFiles/ar_gibbs.dir/main.cpp.o CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o | proto/libproto.a /usr/local/lib/libprotobuf.a || proto/libproto.a
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+  LINK_LIBRARIES = proto/libproto.a  /usr/local/lib/libprotobuf.a
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -88,7 +96,7 @@ build ar_gibbs: CXX_EXECUTABLE_LINKER__ar_gibbs_Debug CMakeFiles/ar_gibbs.dir/ma
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/daniel/CLionProjects/ar_gibbs/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -99,7 +107,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/daniel/CLionProjects/ar_gibbs/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/daniel/CLionProjects/ar_gibbs -B/Users/daniel/CLionProjects/ar_gibbs/cmake-build-debug
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/daniel/Desktop/ar_gibbs -B/Users/daniel/Desktop/ar_gibbs/cmake-build-debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -107,7 +115,145 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/daniel/Desktop/ar_gibbs/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target proto
+
+
+#############################################
+# Order-only phony target for proto
+
+build cmake_object_order_depends_target_proto: phony || proto/o.pb.cc proto/o.pb.h proto/scalar_it.pb.cc proto/scalar_it.pb.h proto/vector_it.pb.cc proto/vector_it.pb.h proto/xdata.pb.cc proto/xdata.pb.h proto/ydata.pb.cc proto/ydata.pb.h
+
+build proto/CMakeFiles/proto.dir/ydata.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/ydata.pb.cc || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/ydata.pb.cc.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
+
+build proto/CMakeFiles/proto.dir/xdata.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/xdata.pb.cc || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/xdata.pb.cc.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
+
+build proto/CMakeFiles/proto.dir/vector_it.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/vector_it.pb.cc || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/vector_it.pb.cc.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
+
+build proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/scalar_it.pb.cc || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
+
+build proto/CMakeFiles/proto.dir/o.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/o.pb.cc || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/o.pb.cc.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target proto
+
+
+#############################################
+# Link the static library proto/libproto.a
+
+build proto/libproto.a: CXX_STATIC_LIBRARY_LINKER__proto_Debug proto/CMakeFiles/proto.dir/ydata.pb.cc.o proto/CMakeFiles/proto.dir/xdata.pb.cc.o proto/CMakeFiles/proto.dir/vector_it.pb.cc.o proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o proto/CMakeFiles/proto.dir/o.pb.cc.o
+  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = proto/libproto.a
+  TARGET_PDB = proto.a.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build proto/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build proto/edit_cache: phony proto/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build proto/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/daniel/Desktop/ar_gibbs -B/Users/daniel/Desktop/ar_gibbs/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build proto/rebuild_cache: phony proto/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Custom command for proto/ydata.pb.h
+
+build proto/ydata.pb.h proto/ydata.pb.cc | ${cmake_ninja_workdir}proto/ydata.pb.h ${cmake_ninja_workdir}proto/ydata.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/ydata.proto /usr/local/bin/protoc
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/ydata.proto
+  DESC = Running cpp protocol buffer compiler on ydata.proto
+  restat = 1
+
+
+#############################################
+# Custom command for proto/xdata.pb.h
+
+build proto/xdata.pb.h proto/xdata.pb.cc | ${cmake_ninja_workdir}proto/xdata.pb.h ${cmake_ninja_workdir}proto/xdata.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/xdata.proto /usr/local/bin/protoc
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/xdata.proto
+  DESC = Running cpp protocol buffer compiler on xdata.proto
+  restat = 1
+
+
+#############################################
+# Custom command for proto/vector_it.pb.h
+
+build proto/vector_it.pb.h proto/vector_it.pb.cc | ${cmake_ninja_workdir}proto/vector_it.pb.h ${cmake_ninja_workdir}proto/vector_it.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/vector_it.proto /usr/local/bin/protoc
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/vector_it.proto
+  DESC = Running cpp protocol buffer compiler on vector_it.proto
+  restat = 1
+
+
+#############################################
+# Custom command for proto/scalar_it.pb.h
+
+build proto/scalar_it.pb.h proto/scalar_it.pb.cc | ${cmake_ninja_workdir}proto/scalar_it.pb.h ${cmake_ninja_workdir}proto/scalar_it.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/scalar_it.proto /usr/local/bin/protoc
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/scalar_it.proto
+  DESC = Running cpp protocol buffer compiler on scalar_it.proto
+  restat = 1
+
+
+#############################################
+# Custom command for proto/o.pb.h
+
+build proto/o.pb.h proto/o.pb.cc | ${cmake_ninja_workdir}proto/o.pb.h ${cmake_ninja_workdir}proto/o.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/o.proto /usr/local/bin/protoc
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/o.proto
+  DESC = Running cpp protocol buffer compiler on o.proto
+  restat = 1
+
+# =============================================================================
 # Target aliases.
+
+build libproto.a: phony proto/libproto.a
+
+build proto: phony proto/libproto.a
 
 # =============================================================================
 # Folder targets.
@@ -115,9 +261,16 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 
 #############################################
-# Folder: /Users/daniel/CLionProjects/ar_gibbs/cmake-build-debug
+# Folder: /Users/daniel/Desktop/ar_gibbs/cmake-build-debug
 
-build all: phony ar_gibbs
+build all: phony ar_gibbs proto/all
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto
+
+build proto/all: phony proto/libproto.a
 
 # =============================================================================
 # Built-in targets
@@ -126,14 +279,14 @@ build all: phony ar_gibbs
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/UnixPaths.cmake /Users/daniel/CLionProjects/ar_gibbs/CMakeLists.txt CMakeCache.txt CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindProtobuf.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindThreads.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/SelectLibraryConfigurations.cmake /Users/daniel/Desktop/ar_gibbs/CMakeLists.txt /Users/daniel/Desktop/ar_gibbs/proto/CMakeLists.txt CMakeCache.txt CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/UnixPaths.cmake /Users/daniel/CLionProjects/ar_gibbs/CMakeLists.txt CMakeCache.txt CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake: phony
+build /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindProtobuf.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/FindThreads.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/SelectLibraryConfigurations.cmake /Users/daniel/Desktop/ar_gibbs/CMakeLists.txt /Users/daniel/Desktop/ar_gibbs/proto/CMakeLists.txt CMakeCache.txt CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake: phony
 
 
 #############################################

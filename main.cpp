@@ -8,21 +8,26 @@
 //
 #include "eigenmvn.h"
 #include "matern.h"
-#include "coordinates.h"
-#include "gibbs_sampler.h"
-
+#include "calc_posterior/posterior.h"
+#include "chrono"
+#include "cmake-build-debug/proto/ydata.pb.h"
+#include <fstream>
+#include "coordinates/coordinates.h"
+#include "ar_model/ar_class.h"
+#include<random>
 
 // Source files
 
+int main(int argc,char* argv[]) {
+    
 
-
-int main() {
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     // data generation of model using T = 10, N = 10, p = 5
     // can be rewritten with generic param, as class+methods or function
     const unsigned int T = 50;
-    const unsigned p = 5;
-    const unsigned N = 10;
+    const unsigned int p = 5;
+    const unsigned int N = 10;
 
 
     // all fixed parameters (for testing functions etc.)
@@ -75,6 +80,7 @@ int main() {
     // w_t generation + generate coord points
     Eigen::MatrixXf covar_w(N, N);
     // calculation of covar matrix
+    std::vector<coord> coord_store_vec(10);
     {
         // hard code 10 coords
         coord c1(10, 40);
@@ -87,7 +93,6 @@ int main() {
         coord c8(40, 10);
         coord c9(35, 5);
         coord c10(8, 5);
-        std::vector<coord> coord_store_vec(10);
         coord_store_vec = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10};
         //matern correlation matrix
         for (int i = 0; i < N; ++i) {
@@ -99,7 +104,7 @@ int main() {
     }
     // sample w's
     Eigen::VectorXf mean_w(N);
-    std::vector<Eigen::VectorXf> wt_store_vec(T);
+    std::array<Eigen::VectorXf, T> wt_store_vec;
     {
         Eigen::EigenMultivariateNormal<float> normal_sampler(mean_w, covar_w);
         for (int t = 0; t <= T-1; ++t) {
@@ -109,7 +114,7 @@ int main() {
 
     //O_t calculation (aribtrary beta parameter)
 
-    std::vector<Eigen::VectorXf> ot_store_vec(T+1);
+    std::array<Eigen::VectorXf, T> ot_store_vec;
     {
         // normal sampler for initial O_0; take same cov matrix as for w_t, but mean different from 0
         Eigen::EigenMultivariateNormal<float> normal_sampler(mu_0, covar_w*sigma_0 /sigma_w );
@@ -122,7 +127,7 @@ int main() {
     }
 
     // Eps data generation
-    std::vector<Eigen::VectorXf> epst_store_vec(T);
+    std::array<Eigen::VectorXf, T> epst_store_vec;
     {
         Eigen::VectorXf mean_eps(N); // init is (I think) always to 0
         Eigen::MatrixXf covar_eps(N, N);
@@ -135,12 +140,16 @@ int main() {
         }
 
     }
-
+    y_data::full_y y;
     // Y_t data calculation
     std::vector<Eigen::VectorXf> yt_store_vec(T);
     {
         for (int t = 0; t <= T-1; t++) {
             yt_store_vec[t] = ot_store_vec[t+1] + epst_store_vec[t];
+            y_data::vector* y_vector = y.add_vec_t();
+            y_vector->set_t(t);
+            y_vector->mutable_vec_value()-> Add(yt_store_vec[t].begin(), yt_store_vec[t].end());
+            // copy data vector to protobuf
         }
     }
     ///////// DATA GENERATION END /////////
@@ -152,13 +161,32 @@ int main() {
     Eigen::MatrixXf S_0_inv = S_0.inverse();
 
 
+    //serialization
+  {
+    std::string serializedData;
+    if (!y.SerializeToString(&serializedData)) {
+      std::cerr << "Failed to write data." << std::endl;
+      return -1;
+    }
+    std::ofstream outputFile("serialized_data.bin", std::ios::binary);
+    if (outputFile.is_open()) {
+        outputFile.write(serializedData.c_str(), serializedData.size());
+        outputFile.close();
+        std::cout << "Serialized data written to serialized_data.bin" << std::endl;
+    } else {
+        std::cerr << "Error: Unable to open the output file." << std::endl;
+    }
+  }
 
-        return 0;
+
+
+    unsigned int n_iter = 100;
+
+
+    ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec);
+    a.sample();
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Time elapsed = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+
 }
-
-
-//size_t t = 0;
-//for (auto& x : yt_store_vec) {
-//std::cout << "Y_" << t << "\n" << x << "\n" << std::endl;
-//t++;
-//}
