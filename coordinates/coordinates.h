@@ -15,10 +15,10 @@ private:
 public:
     coord() = default;
     coord(double x, double y): x(x), y(y){};
-    float get_x() const {
+    double get_x() const {
         return x;
     };
-    float get_y() const{
+    double get_y() const{
         return y;
     };
     void set_x(float& x){
@@ -29,6 +29,6 @@ public:
     }
 };
 
-float eucl_dist(coord& c1, coord& c2);
+double eucl_dist(coord& c1, coord& c2);
 
 #endif //AR_GIBBS_COORDINATES_CPP
