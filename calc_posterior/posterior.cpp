@@ -12,7 +12,8 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         Eigen::MatrixXd temp(x_store_vec[0].cols(), x_store_vec[0].cols());
         //iteration starts at first element of x_store_vec which is t = 1
         for (int t = 0; t < x_store_vec.size()-1; ++t) {
-            temp += x_store_vec[t].transpose() * covar_w_inv * x_store_vec[t];
+            auto mat = x_store_vec[t].transpose() * covar_w_inv * x_store_vec[t];
+            temp += mat;
         }
         temp +=  id_mat * 1/sigma_beta_prior;
         return temp.inverse();

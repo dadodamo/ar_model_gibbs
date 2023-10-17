@@ -15,6 +15,7 @@
 #include "coordinates/coordinates.h"
 #include "ar_model/ar_class.h"
 #include<random>
+#include"debug_functions/debug.h"
 
 // Source files
 
@@ -193,7 +194,7 @@ int main(int argc,char* argv[]) {
     unsigned int n_iter = 1000;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-    ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec);
+    ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho);
     a.sample();
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

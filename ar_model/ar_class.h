@@ -14,7 +14,9 @@
 #include "../calc_posterior/posterior.h"
 #include <random>
 #include<string>
+#include "../debug_functions/debug.h"
 
+// DEBUG MODE
 
 
 class ar_model {
@@ -31,13 +33,18 @@ class ar_model {
         std::vector<Eigen::MatrixXd> X;
         std::vector<coord> coordinates;
 
+        //debug
+        std::vector<Eigen::VectorXd> ot;
+        Eigen::VectorXd beta_true;
+        double rho_true;
+        Eigen::VectorXd mu_0_true;
+
         Eigen::VectorXd beta;
-        std::vector<Eigen::VectorXd> ot_store_vec;
         double rho;
         Eigen::VectorXd mu_0;
 
         double phi = 1.;
-        double nu = 0.5;
+        double nu = 1.;
 
         // matern matrix
         Eigen::MatrixXd matern_inv;
@@ -62,8 +69,17 @@ class ar_model {
         ar_model(unsigned int n, unsigned int T, 
         std::vector<Eigen::VectorXd>& y_store,
         std::vector<Eigen::MatrixXd>& x_store,
-        std::vector<coord>& coord_vec):
-        y(y_store), X(x_store), coordinates(coord_vec),
+        std::vector<coord>& coord_vec,
+        std::vector<Eigen::VectorXd> ot_store,
+        Eigen::VectorXd beta,
+        Eigen::VectorXd mu_0,
+        double rho):
+        y(y_store), X(x_store),
+        coordinates(coord_vec),
+        ot(ot_store),
+        beta_true(beta),
+        mu_0_true(mu_0),
+        rho_true(rho),
         n_iter(n), T(T)
         {
             N = (X)[0].rows();
@@ -76,6 +92,9 @@ class ar_model {
                     matern_cov(i, j) = matern(dist, phi, nu);
                  }
             }
+            std::cout << matern_cov << std::endl;
+            check_eigenvalues(matern_cov);
+
             matern_inv = matern_cov.inverse();
         };
         
