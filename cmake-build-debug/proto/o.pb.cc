@@ -115,7 +115,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_o_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\007o.proto\022\006o_data\"&\n\006vector\022\t\n\001t\030\001 \002(\005\022\021"
-  "\n\tvec_value\030\002 \003(\002\"3\n\006matrix\022\014\n\004iter\030\001 \002("
+  "\n\tvec_value\030\002 \003(\001\"3\n\006matrix\022\014\n\004iter\030\001 \002("
   "\005\022\033\n\003vec\030\002 \003(\0132\016.o_data.vector\"&\n\tfull_o"
   "_it\022\031\n\001m\030\001 \003(\0132\016.o_data.matrix"
   ;
@@ -224,18 +224,18 @@ const char* vector::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated float vec_value = 2;
+      // repeated double vec_value = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 21)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           ptr -= 1;
           do {
             ptr += 1;
-            _internal_add_vec_value(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
-            ptr += sizeof(float);
+            _internal_add_vec_value(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
+            ptr += sizeof(double);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<21>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<17>(ptr));
         } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_vec_value(), ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedDoubleParser(_internal_mutable_vec_value(), ptr, ctx);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -275,10 +275,10 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_t(), target);
   }
 
-  // repeated float vec_value = 2;
+  // repeated double vec_value = 2;
   for (int i = 0, n = this->_internal_vec_value_size(); i < n; i++) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_vec_value(i), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_vec_value(i), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -303,10 +303,10 @@ size_t vector::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated float vec_value = 2;
+  // repeated double vec_value = 2;
   {
     unsigned int count = static_cast<unsigned int>(this->_internal_vec_value_size());
-    size_t data_size = 4UL * count;
+    size_t data_size = 8UL * count;
     total_size += 1 *
                   ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_vec_value_size());
     total_size += data_size;

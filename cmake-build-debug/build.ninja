@@ -49,28 +49,28 @@ build cmake_object_order_depends_target_ar_gibbs: phony || cmake_object_order_de
 build CMakeFiles/ar_gibbs.dir/main.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/main.cpp || cmake_object_order_depends_target_ar_gibbs
   DEP_FILE = CMakeFiles/ar_gibbs.dir/main.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir
 
 build CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/coordinates/coordinates.cpp || cmake_object_order_depends_target_ar_gibbs
   DEP_FILE = CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/coordinates
 
 build CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/calc_posterior/posterior.cpp || cmake_object_order_depends_target_ar_gibbs
   DEP_FILE = CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/calc_posterior
 
 build CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/ar_model/ar_class.cpp || cmake_object_order_depends_target_ar_gibbs
   DEP_FILE = CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/ar_model
 
@@ -131,35 +131,35 @@ build cmake_object_order_depends_target_proto: phony || proto/o.pb.cc proto/o.pb
 build proto/CMakeFiles/proto.dir/ydata.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/ydata.pb.cc || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/ydata.pb.cc.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 
 build proto/CMakeFiles/proto.dir/xdata.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/xdata.pb.cc || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/xdata.pb.cc.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 
 build proto/CMakeFiles/proto.dir/vector_it.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/vector_it.pb.cc || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/vector_it.pb.cc.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 
 build proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/scalar_it.pb.cc || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 
 build proto/CMakeFiles/proto.dir/o.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/o.pb.cc || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/o.pb.cc.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
-  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 

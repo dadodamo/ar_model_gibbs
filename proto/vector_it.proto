@@ -3,7 +3,7 @@ package vector;
 
 message vector {
   required int32 iter = 1;
-  repeated float vec_value = 2;
+  repeated double vec_value = 2;
 }
 
 message full_iter_vec {

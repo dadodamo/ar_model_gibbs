@@ -188,9 +188,22 @@ class scalar PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kIterFieldNumber = 1,
     kValueFieldNumber = 2,
+    kIterFieldNumber = 1,
   };
+  // required double value = 2;
+  bool has_value() const;
+  private:
+  bool _internal_has_value() const;
+  public:
+  void clear_value();
+  double value() const;
+  void set_value(double value);
+  private:
+  double _internal_value() const;
+  void _internal_set_value(double value);
+  public:
+
   // required int32 iter = 1;
   bool has_iter() const;
   private:
@@ -202,19 +215,6 @@ class scalar PROTOBUF_FINAL :
   private:
   ::PROTOBUF_NAMESPACE_ID::int32 _internal_iter() const;
   void _internal_set_iter(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
-  // required float value = 2;
-  bool has_value() const;
-  private:
-  bool _internal_has_value() const;
-  public:
-  void clear_value();
-  float value() const;
-  void set_value(float value);
-  private:
-  float _internal_value() const;
-  void _internal_set_value(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:scalar.scalar)
@@ -229,8 +229,8 @@ class scalar PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  double value_;
   ::PROTOBUF_NAMESPACE_ID::int32 iter_;
-  float value_;
   friend struct ::TableStruct_scalar_5fit_2eproto;
 };
 // -------------------------------------------------------------------
@@ -398,7 +398,7 @@ class full_scalar_it PROTOBUF_FINAL :
 
 // required int32 iter = 1;
 inline bool scalar::_internal_has_iter() const {
-  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline bool scalar::has_iter() const {
@@ -406,7 +406,7 @@ inline bool scalar::has_iter() const {
 }
 inline void scalar::clear_iter() {
   iter_ = 0;
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 scalar::_internal_iter() const {
   return iter_;
@@ -416,7 +416,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 scalar::iter() const {
   return _internal_iter();
 }
 inline void scalar::_internal_set_iter(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
   iter_ = value;
 }
 inline void scalar::set_iter(::PROTOBUF_NAMESPACE_ID::int32 value) {
@@ -424,9 +424,9 @@ inline void scalar::set_iter(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:scalar.scalar.iter)
 }
 
-// required float value = 2;
+// required double value = 2;
 inline bool scalar::_internal_has_value() const {
-  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
 inline bool scalar::has_value() const {
@@ -434,20 +434,20 @@ inline bool scalar::has_value() const {
 }
 inline void scalar::clear_value() {
   value_ = 0;
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
-inline float scalar::_internal_value() const {
+inline double scalar::_internal_value() const {
   return value_;
 }
-inline float scalar::value() const {
+inline double scalar::value() const {
   // @@protoc_insertion_point(field_get:scalar.scalar.value)
   return _internal_value();
 }
-inline void scalar::_internal_set_value(float value) {
-  _has_bits_[0] |= 0x00000002u;
+inline void scalar::_internal_set_value(double value) {
+  _has_bits_[0] |= 0x00000001u;
   value_ = value;
 }
-inline void scalar::set_value(float value) {
+inline void scalar::set_value(double value) {
   _internal_set_value(value);
   // @@protoc_insertion_point(field_set:scalar.scalar.value)
 }

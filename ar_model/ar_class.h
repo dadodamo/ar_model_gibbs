@@ -64,6 +64,10 @@ class ar_model {
         std::pair<double, double> ab_w_prior = {1,1};
         std::pair<double, double> ab_0_prior = {1,1};
 
+        // algo options
+        bool use_cholesky;
+        u_int64_t seed;
+
 
     public:
         ar_model(unsigned int n, unsigned int T, 
@@ -73,14 +77,16 @@ class ar_model {
         std::vector<Eigen::VectorXd> ot_store,
         Eigen::VectorXd beta,
         Eigen::VectorXd mu_0,
-        double rho):
+        double rho, bool use_cholesky = false,
+        u_int64_t seed = 1):
         y(y_store), X(x_store),
         coordinates(coord_vec),
         ot(ot_store),
         beta_true(beta),
         mu_0_true(mu_0),
         rho_true(rho),
-        n_iter(n), T(T)
+        n_iter(n), T(T),
+        use_cholesky(use_cholesky), seed(seed)
         {
             N = (X)[0].rows();
             p = (X)[0].cols();
@@ -92,12 +98,8 @@ class ar_model {
                     matern_cov(i, j) = matern(dist, phi, nu);
                  }
             }
-            std::cout << matern_cov << std::endl;
-            check_eigenvalues(matern_cov);
-
             matern_inv = matern_cov.inverse();
         };
-        
         void sample() const;
 };
 

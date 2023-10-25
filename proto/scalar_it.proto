@@ -3,7 +3,7 @@ package scalar;
 
 message scalar{
   required int32 iter = 1;
-  required float value = 2;
+  required double value = 2;
 }
 
 message full_scalar_it {

@@ -3,7 +3,7 @@ package o_data;
 
 message vector {
   required int32 t = 1;
-  repeated float vec_value = 2;
+  repeated double vec_value = 2;
 }
 
 message matrix {

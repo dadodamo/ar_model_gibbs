@@ -191,26 +191,26 @@ class vector PROTOBUF_FINAL :
     kVecValueFieldNumber = 2,
     kIterFieldNumber = 1,
   };
-  // repeated float vec_value = 2;
+  // repeated double vec_value = 2;
   int vec_value_size() const;
   private:
   int _internal_vec_value_size() const;
   public:
   void clear_vec_value();
   private:
-  float _internal_vec_value(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+  double _internal_vec_value(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
       _internal_vec_value() const;
-  void _internal_add_vec_value(float value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+  void _internal_add_vec_value(double value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
       _internal_mutable_vec_value();
   public:
-  float vec_value(int index) const;
-  void set_vec_value(int index, float value);
-  void add_vec_value(float value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+  double vec_value(int index) const;
+  void set_vec_value(int index, double value);
+  void add_vec_value(double value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
       vec_value() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
       mutable_vec_value();
 
   // required int32 iter = 1;
@@ -235,7 +235,7 @@ class vector PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > vec_value_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double > vec_value_;
   ::PROTOBUF_NAMESPACE_ID::int32 iter_;
   friend struct ::TableStruct_vector_5fit_2eproto;
 };
@@ -430,7 +430,7 @@ inline void vector::set_iter(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:vector.vector.iter)
 }
 
-// repeated float vec_value = 2;
+// repeated double vec_value = 2;
 inline int vector::_internal_vec_value_size() const {
   return vec_value_.size();
 }
@@ -440,38 +440,38 @@ inline int vector::vec_value_size() const {
 inline void vector::clear_vec_value() {
   vec_value_.Clear();
 }
-inline float vector::_internal_vec_value(int index) const {
+inline double vector::_internal_vec_value(int index) const {
   return vec_value_.Get(index);
 }
-inline float vector::vec_value(int index) const {
+inline double vector::vec_value(int index) const {
   // @@protoc_insertion_point(field_get:vector.vector.vec_value)
   return _internal_vec_value(index);
 }
-inline void vector::set_vec_value(int index, float value) {
+inline void vector::set_vec_value(int index, double value) {
   vec_value_.Set(index, value);
   // @@protoc_insertion_point(field_set:vector.vector.vec_value)
 }
-inline void vector::_internal_add_vec_value(float value) {
+inline void vector::_internal_add_vec_value(double value) {
   vec_value_.Add(value);
 }
-inline void vector::add_vec_value(float value) {
+inline void vector::add_vec_value(double value) {
   _internal_add_vec_value(value);
   // @@protoc_insertion_point(field_add:vector.vector.vec_value)
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
 vector::_internal_vec_value() const {
   return vec_value_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
 vector::vec_value() const {
   // @@protoc_insertion_point(field_list:vector.vector.vec_value)
   return _internal_vec_value();
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
 vector::_internal_mutable_vec_value() {
   return &vec_value_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
 vector::mutable_vec_value() {
   // @@protoc_insertion_point(field_mutable_list:vector.vector.vec_value)
   return _internal_mutable_vec_value();

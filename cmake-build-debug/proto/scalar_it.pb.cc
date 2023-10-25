@@ -64,8 +64,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_scalar_5fit_2eproto::offsets[]
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::scalar::scalar, iter_),
   PROTOBUF_FIELD_OFFSET(::scalar::scalar, value_),
-  0,
   1,
+  0,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::scalar::full_scalar_it, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -85,7 +85,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_scalar_5fit_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\017scalar_it.proto\022\006scalar\"%\n\006scalar\022\014\n\004i"
-  "ter\030\001 \002(\005\022\r\n\005value\030\002 \002(\002\"0\n\016full_scalar_"
+  "ter\030\001 \002(\005\022\r\n\005value\030\002 \002(\001\"0\n\016full_scalar_"
   "it\022\036\n\006scalar\030\001 \003(\0132\016.scalar.scalar"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_scalar_5fit_2eproto_deps[1] = {
@@ -112,10 +112,10 @@ class scalar::_Internal {
  public:
   using HasBits = decltype(std::declval<scalar>()._has_bits_);
   static void set_has_iter(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
+    (*has_bits)[0] |= 2u;
   }
   static void set_has_value(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
+    (*has_bits)[0] |= 1u;
   }
   static bool MissingRequiredFields(const HasBits& has_bits) {
     return ((has_bits[0] & 0x00000003) ^ 0x00000003) != 0;
@@ -132,17 +132,17 @@ scalar::scalar(const scalar& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&iter_, &from.iter_,
-    static_cast<size_t>(reinterpret_cast<char*>(&value_) -
-    reinterpret_cast<char*>(&iter_)) + sizeof(value_));
+  ::memcpy(&value_, &from.value_,
+    static_cast<size_t>(reinterpret_cast<char*>(&iter_) -
+    reinterpret_cast<char*>(&value_)) + sizeof(iter_));
   // @@protoc_insertion_point(copy_constructor:scalar.scalar)
 }
 
 void scalar::SharedCtor() {
   ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&iter_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&value_) -
-      reinterpret_cast<char*>(&iter_)) + sizeof(value_));
+      reinterpret_cast<char*>(&value_) - reinterpret_cast<char*>(this)),
+      0, static_cast<size_t>(reinterpret_cast<char*>(&iter_) -
+      reinterpret_cast<char*>(&value_)) + sizeof(iter_));
 }
 
 scalar::~scalar() {
@@ -178,9 +178,9 @@ void scalar::Clear() {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
-    ::memset(&iter_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&value_) -
-        reinterpret_cast<char*>(&iter_)) + sizeof(value_));
+    ::memset(&value_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&iter_) -
+        reinterpret_cast<char*>(&value_)) + sizeof(iter_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -202,12 +202,12 @@ const char* scalar::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required float value = 2;
+      // required double value = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 21)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_value(&has_bits);
-          value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+          value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
       default: {
@@ -241,15 +241,15 @@ failure:
 
   cached_has_bits = _has_bits_[0];
   // required int32 iter = 1;
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_iter(), target);
   }
 
-  // required float value = 2;
-  if (cached_has_bits & 0x00000002u) {
+  // required double value = 2;
+  if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_value(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -264,16 +264,16 @@ size_t scalar::RequiredFieldsByteSizeFallback() const {
 // @@protoc_insertion_point(required_fields_byte_size_fallback_start:scalar.scalar)
   size_t total_size = 0;
 
+  if (_internal_has_value()) {
+    // required double value = 2;
+    total_size += 1 + 8;
+  }
+
   if (_internal_has_iter()) {
     // required int32 iter = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_iter());
-  }
-
-  if (_internal_has_value()) {
-    // required float value = 2;
-    total_size += 1 + 4;
   }
 
   return total_size;
@@ -283,13 +283,13 @@ size_t scalar::ByteSizeLong() const {
   size_t total_size = 0;
 
   if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required double value = 2;
+    total_size += 1 + 8;
+
     // required int32 iter = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_iter());
-
-    // required float value = 2;
-    total_size += 1 + 4;
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -332,10 +332,10 @@ void scalar::MergeFrom(const scalar& from) {
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
-      iter_ = from.iter_;
+      value_ = from.value_;
     }
     if (cached_has_bits & 0x00000002u) {
-      value_ = from.value_;
+      iter_ = from.iter_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -365,11 +365,11 @@ void scalar::InternalSwap(scalar* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(scalar, value_)
-      + sizeof(scalar::value_)
-      - PROTOBUF_FIELD_OFFSET(scalar, iter_)>(
-          reinterpret_cast<char*>(&iter_),
-          reinterpret_cast<char*>(&other->iter_));
+      PROTOBUF_FIELD_OFFSET(scalar, iter_)
+      + sizeof(scalar::iter_)
+      - PROTOBUF_FIELD_OFFSET(scalar, value_)>(
+          reinterpret_cast<char*>(&value_),
+          reinterpret_cast<char*>(&other->value_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata scalar::GetMetadata() const {
