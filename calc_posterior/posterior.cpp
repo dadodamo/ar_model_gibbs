@@ -12,8 +12,7 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         Eigen::MatrixXd temp(x_store_vec[0].cols(), x_store_vec[0].cols());
         //iteration starts at first element of x_store_vec which is t = 1
         for (int t = 0; t < x_store_vec.size()-1; ++t) {
-            auto mat = x_store_vec[t].transpose() * covar_w_inv * x_store_vec[t];
-            temp += mat;
+            temp += x_store_vec[t].transpose() * covar_w_inv * x_store_vec[t];
         }
         temp +=  id_mat * 1/sigma_beta_prior;
         return temp.inverse();
@@ -108,10 +107,10 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         param.second = b_prior + 1/2 * ( o_0 - mu_0_prior).transpose() * S_0_inv * (o_0 - mu_0_prior);
         return param;
     };
-    Eigen::VectorXd post::calc_mean_mu_0(Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0){
+    Eigen::VectorXd post::calc_mean_mu_0(const Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0){
         return S_0_inv * o_0 /sigma_0;
     };
-    Eigen::MatrixXd post::calc_cov_mu_0(Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0, double& sigma_mu_prior){
+    Eigen::MatrixXd post::calc_cov_mu_0(const Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0, const double& sigma_mu_prior){
         auto id_mat = Eigen::MatrixXd::Identity(S_0_inv.cols(),S_0_inv.cols());
         Eigen::MatrixXd cov = (1/sigma_0) * S_0_inv + 1/sigma_mu_prior * id_mat;
         return cov.inverse();

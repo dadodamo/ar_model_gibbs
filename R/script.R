@@ -19,11 +19,17 @@ betas <- sapply(list_beta, function(x){x$vec_value});
 
 par(mfrow = c(5, 1))
 par(mar = c(2, 4, 2, 1))
-plot(betas[1,10:1000], type='l')
-plot(betas[2,10:1000], type='l')
-plot(betas[3,10:1000], type='l')
-plot(betas[4,10:1000], type='l')
-plot(betas[5,10:1000], type='l')
+plot(betas[1,50:3000], type='l')
+plot(betas[2,50:3000], type='l')
+plot(betas[3,50:3000], type='l')
+plot(betas[4,50:3000], type='l')
+plot(betas[5,50:3000], type='l')
+mean(betas[1,2000:3000])
+mean(betas[2,2000:3000])
+mean(betas[3,2000:3000])
+mean(betas[4,2000:3000])
+mean(betas[5,2000:3000])
+
 dev.off()
 ## o's
 ## read o file
@@ -41,7 +47,7 @@ o <- sapply(list_o, function(x){x$vec})
 o <- sapply(o, function(x){x$vec_value})
 
 
-
+dev.off()
 #read proto scalar file
 scalar_proto <- RProtoBuf::readProtoFiles(files = "proto/scalar_it.proto")
 
@@ -55,3 +61,18 @@ list_rho <- as.list(msg_rho$scalar)
 
 rho <- sapply(list_rho, function(x){x$value});
 plot(rho[20:1000], type = 'l')
+mean(rho)
+
+#mu_0
+
+## read beta file
+file_path_mu0 <- "cmake-build-debug/mu0_serialized.bin"  
+binary_data_mu0 <- readBin(file_path_mu0, "raw", file.info(file_path_mu0)$size)
+
+msg_mu0 <- read(vector.full_iter_vec, binary_data_mu0)
+
+## writeLines(as.character(msg_beta$vec_t[1]))
+list_mu0 <- as.list(msg_mu0$vec_t)
+
+mu0 <- sapply(list_mu0, function(x){x$vec_value});
+

@@ -42,7 +42,7 @@ namespace post {
     std::pair<double, double> calc_a_b_sigma_0(double& a_prior, double& b_prior,
                                              const unsigned int& n, const unsigned int& T, Eigen::MatrixXd& S_0_inv ,Eigen::VectorXd& o_0, Eigen::VectorXd& mu_0_prior);
 
-    Eigen::VectorXd calc_mean_mu_0(Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0);
-    Eigen::MatrixXd calc_cov_mu_0(Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0, double& sigma_mu_prior);
+    Eigen::VectorXd calc_mean_mu_0(const Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0);
+    Eigen::MatrixXd calc_cov_mu_0(const Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0,const double& sigma_mu_prior);
 
 }

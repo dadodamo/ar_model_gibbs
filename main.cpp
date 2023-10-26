@@ -174,26 +174,7 @@ int main(int argc,char* argv[]) {
     Eigen::MatrixXd S_0 = covar_w/sigma_w;
     Eigen::MatrixXd S_0_inv = S_0.inverse();
 
-//    //serialization
-//  {
-//    std::string serializedData;
-//    if (!y.SerializeToString(&serializedData)) {
-//      std::cerr << "Failed to write data." << std::endl;
-//      return -1;
-//    }
-//    std::ofstream outputFile("serialized_data.bin", std::ios::binary);
-//    if (outputFile.is_open()) {
-//        outputFile.write(serializedData.c_str(), serializedData.size());
-//        outputFile.close();
-//        std::cout << "Serialized data written to serialized_data.bin" << std::endl;
-//    } else {
-//        std::cerr << "Error: Unable to open the output file." << std::endl;
-//    }
-//  }
-//
-//
-
-    unsigned int n_iter = 1000;
+    unsigned int n_iter = 3000;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho);
