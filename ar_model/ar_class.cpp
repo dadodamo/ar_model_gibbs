@@ -1,15 +1,17 @@
 #include "ar_class.h"
 
 void ar_model::sample() const {
+    std::mt19937 generator(seed);
 
     //proto buffers
     o_data::full_o_it o_stream;
     scalar::full_scalar_it rho_stream;
     vector::full_iter_vec beta_stream;
     vector::full_iter_vec mu_0_stream;
+    scalar::full_scalar_it sig_0_stream;
+    scalar::full_scalar_it sig_w_stream;
+    scalar::full_scalar_it sig_eps_stream;
 
-
-    std::mt19937 generator;
     // beta update vector
     // float rho
     // sigma_eps
@@ -49,9 +51,9 @@ void ar_model::sample() const {
     double rho;
 //    double rho = rho_true; //debug
 
-    double sigma_eps = 2.; //fixed for now
-    double sigma_w = 5.;     // fixed for now
-    double sigma_0 = 1.;      //fixed for now
+    double sigma_eps;
+    double sigma_w;
+    double sigma_0;
 
     //initialization of samplers
     Eigen::VectorXd zero_prior_p = Eigen::VectorXd::Zero(p);
@@ -60,8 +62,11 @@ void ar_model::sample() const {
     Eigen::EigenMultivariateNormal<double> beta_sampler(zero_prior_p, beta_sig_prior*id_p, use_cholesky, seed);
     Eigen::EigenMultivariateNormal<double> o_sampler(zero_prior_N, id_N, use_cholesky, seed);
     Eigen::EigenMultivariateNormal<double> mu0_sampler(zero_prior_N, id_N, use_cholesky, seed);
-
     std::normal_distribution<double> rho_sampler(rho_mean_prior,sqrt(rho_sig_prior));
+    std::gamma_distribution<double> sig_eps_sampler(ab_eps_prior.first, ab_eps_prior.second);
+    std::gamma_distribution<double> sig_w_sampler(ab_w_prior.first, ab_w_prior.second);
+    std::gamma_distribution<double> sig_0_sampler(ab_0_prior.first, ab_0_prior.second);
+
 
     //initialization
     {
@@ -77,8 +82,14 @@ void ar_model::sample() const {
         // rho
         rho = rho_sampler(generator);
 
+        // mu_0
         mu_0 = mu0_sampler.samples(1);
-        }
+
+        sigma_eps = sig_eps_sampler(generator);
+        sigma_w = sig_w_sampler(generator);
+        sigma_0 = sig_0_sampler(generator);
+
+    }
 
     // for n_iter loop: update o_store, then update beta, then update rho. write in proto files results after iteration
 
@@ -92,7 +103,7 @@ void ar_model::sample() const {
         o_data::matrix* o_matrix= o_stream.add_m();
         o_matrix->set_iter(i);
         //update 0 zero first
-        Eigen::MatrixXd o_zero_update_cov = post::calc_cov_eff_0(w_full_cov_inv,matern_inv, rho, sigma_0); // insert calculations from posterior
+        Eigen::MatrixXd o_zero_update_cov = post::calc_cov_eff_0(w_full_cov_inv,matern_inv, rho, sigma_0);
         Eigen::VectorXd o_zero_update_mean = o_zero_update_cov
                                             * post::calc_mean_eff_0(X[0], w_full_cov_inv, o_store[1],
                                                                     beta, matern_inv, mu_0, rho, sigma_0);
@@ -108,7 +119,7 @@ void ar_model::sample() const {
         o_vector->mutable_vec_value()->Add(o_store[0].begin(), o_store[0].end());
         o_vector->set_t(0);
 
-       //  now update the rest
+        //  now update the rest
 
         for (int t = 1; t < T-1; ++t) {
             Eigen::MatrixXd ot_update_cov = post::calc_cov_eff_t(sigma_eps,w_full_cov_inv );
@@ -179,10 +190,34 @@ void ar_model::sample() const {
 
         rho_scalar->set_value(rho);
 
+
         // sigma calculation
+        std::pair sig_eps_update_ab = post::calc_a_b_sigma_eps(ab_eps_prior.first, ab_eps_prior.second, N, T, y, o_store);
+        sig_eps_sampler.param(std::gamma_distribution<double>::param_type(sig_eps_update_ab.first, sig_eps_update_ab.second));
+        sigma_eps = sig_eps_sampler(generator);
+
+        std::pair sig_w_update_ab = post::calc_a_b_sigma_w(ab_w_prior.first, ab_w_prior.second,N, T, X, matern_inv, o_store, beta, rho);
+        sig_w_sampler.param(std::gamma_distribution<double>::param_type(sig_w_update_ab.first, sig_w_update_ab.second));
+        sigma_w = sig_w_sampler(generator);
+
+        std::pair sig_0_update_ab = post::calc_a_b_sigma_0(ab_0_prior.first, ab_0_prior.second,N, T, matern_inv,o_store[0], mu_0);
+        sig_0_sampler.param(std::gamma_distribution<double>::param_type(sig_0_update_ab.first, sig_0_update_ab.second));
+        sigma_0 = sig_0_sampler(generator);
+
+        scalar::scalar* sig_eps_scalar= sig_eps_stream.add_scalar();
+        sig_eps_scalar->set_iter(i);
+        sig_eps_scalar->set_value(sigma_eps);
+
+        scalar::scalar* sig_w_scalar= sig_w_stream.add_scalar();
+        sig_w_scalar->set_iter(i);
+        sig_w_scalar->set_value(sigma_w);
+
+        scalar::scalar* sig_0_scalar= sig_0_stream.add_scalar();
+        sig_0_scalar->set_iter(i);
+        sig_0_scalar->set_value(sigma_0);
 
 
-        //rest later
+
         std::cout<< "Iteration " << i << " finished" << std::endl;
     }
 
@@ -235,6 +270,45 @@ void ar_model::sample() const {
         outputFile_mu0.write(serialized_mu0.c_str(), serialized_mu0.size());
         outputFile_mu0.close();
         std::cout << "Serialized data written to mu0_serialized.bin" << std::endl;
+    } else {
+        std::cerr << "Error: Unable to open the output file." << std::endl;
+    }
+
+    std::string serialized_sig_eps;
+    if (!sig_eps_stream.SerializeToString(&serialized_sig_eps)) {
+        std::cerr << "Failed to write sigma_eps data." << std::endl;
+    }
+    std::ofstream outputFile_sig_eps("sig_eps_serialized.bin", std::ios::binary);
+    if (outputFile_sig_eps.is_open()) {
+        outputFile_sig_eps.write(serialized_sig_eps.c_str(), serialized_sig_eps.size());
+        outputFile_sig_eps.close();
+        std::cout << "Serialized data written to sig_eps_serialized.bin" << std::endl;
+    } else {
+        std::cerr << "Error: Unable to open the output file." << std::endl;
+    }
+
+    std::string serialized_sig_w;
+    if (!sig_w_stream.SerializeToString(&serialized_sig_w)) {
+        std::cerr << "Failed to write sigma_w data." << std::endl;
+    }
+    std::ofstream outputFile_sig_w("sig_w_serialized.bin", std::ios::binary);
+    if (outputFile_sig_w.is_open()) {
+        outputFile_sig_w.write(serialized_sig_w.c_str(), serialized_sig_w.size());
+        outputFile_sig_w.close();
+        std::cout << "Serialized data written to sig_w_serialized.bin" << std::endl;
+    } else {
+        std::cerr << "Error: Unable to open the output file." << std::endl;
+    }
+
+    std::string serialized_sig_0;
+    if (!sig_0_stream.SerializeToString(&serialized_sig_0)) {
+        std::cerr << "Failed to write sigma_0 data." << std::endl;
+    }
+    std::ofstream outputFile_sig_0("sig_0_serialized.bin", std::ios::binary);
+    if (outputFile_sig_0.is_open()) {
+        outputFile_sig_0.write(serialized_sig_0.c_str(), serialized_sig_0.size());
+        outputFile_sig_0.close();
+        std::cout << "Serialized data written to sig_0_serialized.bin" << std::endl;
     } else {
         std::cerr << "Error: Unable to open the output file." << std::endl;
     }

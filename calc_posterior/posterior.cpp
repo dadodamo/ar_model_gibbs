@@ -77,8 +77,8 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         return cov.inverse();
     };
 
-    std::pair<double, double> post::calc_a_b_sigma_eps(double& a_prior, double& b_prior,
-                                               const unsigned int& n,const  unsigned int& T , std::vector<Eigen::VectorXd>& y_store_vec, std::vector<Eigen::VectorXd>& o_store_vec){
+    std::pair<double, double> post::calc_a_b_sigma_eps(const double& a_prior,const double& b_prior,
+                                               const unsigned int& n,const  unsigned int& T ,const std::vector<Eigen::VectorXd>& y_store_vec, std::vector<Eigen::VectorXd>& o_store_vec){
         std::pair<double, double> param;
         param.first = a_prior + n*T /2;
         double temp = 0;
@@ -88,23 +88,23 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         param.second = b_prior + (1/2) * temp;
         return param;
     };
-    std::pair<double, double> post::calc_a_b_sigma_w(double& a_prior, double& b_prior,
-                                             const unsigned int& n,const unsigned  int& T , std::vector<Eigen::MatrixXd>& x_store_vec,Eigen::MatrixXd& covar_w_inv ,
+    std::pair<double, double> post::calc_a_b_sigma_w(const double& a_prior,const double& b_prior,
+                                             const unsigned int& n,const unsigned  int& T ,const std::vector<Eigen::MatrixXd>& x_store_vec, const Eigen::MatrixXd& matern_inv ,
                                              std::vector<Eigen::VectorXd>& o_store_vec, Eigen::VectorXd& beta, double& rho){
         std::pair<double, double> param;
         param.first = a_prior + n*T /2;
         double temp = 0;
         for (int t = 1; t <= x_store_vec.size(); t++) {
-            temp += (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta).transpose() * covar_w_inv * (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta);
+            temp += (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta).transpose() * matern_inv * (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta);
         }
         param.second = b_prior + 1/2 * temp;
         return param;
     };
-    std::pair<double, double> post::calc_a_b_sigma_0(double& a_prior, double& b_prior,
-                                             const unsigned int& n, const unsigned int& T, Eigen::MatrixXd& S_0_inv ,Eigen::VectorXd& o_0, Eigen::VectorXd& mu_0_prior){
+    std::pair<double, double> post::calc_a_b_sigma_0(const double& a_prior, const double& b_prior,
+                                             const unsigned int& n, const unsigned int& T, const Eigen::MatrixXd& S_0_inv ,Eigen::VectorXd& o_0,Eigen::VectorXd& mu_0){
         std::pair<double, double> param;
         param.first = a_prior + n/2;
-        param.second = b_prior + 1/2 * ( o_0 - mu_0_prior).transpose() * S_0_inv * (o_0 - mu_0_prior);
+        param.second = b_prior + 1/2 * ( o_0 - mu_0).transpose() * S_0_inv * (o_0 - mu_0);
         return param;
     };
     Eigen::VectorXd post::calc_mean_mu_0(const Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0){

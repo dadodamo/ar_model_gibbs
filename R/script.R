@@ -60,7 +60,7 @@ msg_rho <- read(scalar.full_scalar_it, binary_data_rho)
 list_rho <- as.list(msg_rho$scalar)
 
 rho <- sapply(list_rho, function(x){x$value});
-plot(rho[20:1000], type = 'l')
+plot(rho[2000:3000], type = 'l')
 mean(rho)
 
 #mu_0
@@ -75,4 +75,8 @@ msg_mu0 <- read(vector.full_iter_vec, binary_data_mu0)
 list_mu0 <- as.list(msg_mu0$vec_t)
 
 mu0 <- sapply(list_mu0, function(x){x$vec_value});
+par(mfrow = c(5, 2))
+for (i in 1:10) {
+  plot(mu0[i,2000:3000], type = 'l')
+}
 
