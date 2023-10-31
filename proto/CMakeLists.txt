@@ -7,4 +7,4 @@ PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER
         vector_it.proto
         scalar_it.proto
         o.proto)
-ADD_LIBRARY(proto ${PROTO_HEADER} ${PROTO_SRC})
+ADD_LIBRARY(proto ${PROTO_HEADER} ${PROTO_SRC} ../protocpp/serialize.h ../protocpp/serialize.cpp)

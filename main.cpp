@@ -10,8 +10,6 @@
 #include "matern.h"
 #include "calc_posterior/posterior.h"
 #include "chrono"
-#include "cmake-build-debug/proto/ydata.pb.h"
-#include <fstream>
 #include "coordinates/coordinates.h"
 #include "ar_model/ar_class.h"
 #include<random>
@@ -30,9 +28,9 @@ int main(int argc,char* argv[]) {
     const unsigned int N = 10;
 
 
-    // all fixed parameters (for testing functions etc.)
+    // all fixed parameters
     double phi = 1.0;
-    double nu = 0.5;
+    double nu = 1;
     double rho = 0.8;
 
     //
@@ -43,14 +41,13 @@ int main(int argc,char* argv[]) {
     for (int i = 0; i <N ; ++i) {
         mu_0(i) = i + 2;
     }
-    //
 
-    // model variance copmponents
+    // model variance components
     double sigma_eps = 2.;
     double sigma_w = 5.;
     double sigma_0 = 1.0;
 
-    //priors
+    //priors, to pass if needed
     double sigma_mu_0_prior = 1;
 
     double sig_eps_a_prior = 0.5;
@@ -61,8 +58,6 @@ int main(int argc,char* argv[]) {
 
     double sig_0_a_prior = 0.5;
     double sig_0_b_prior = 0.5;
-
-
 
 
 
@@ -82,7 +77,7 @@ int main(int argc,char* argv[]) {
         Eigen::EigenMultivariateNormal<double> normal_sampler(mean_X, covar_X);
         for (int t = 0; t <= T-1; ++t) {
             Eigen::MatrixXd X(N, p);
-            X = normal_sampler.samples(p); // abs: to have at least meaningful matrix (wrt choice of beta param)
+            X = normal_sampler.samples(p);
             xt_store_vec[t] = X;
         }
     }
@@ -109,32 +104,31 @@ int main(int argc,char* argv[]) {
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
                 double dist = eucl_dist(coord_store_vec[i], coord_store_vec[j]);
-                covar_w(i, j) = sigma_w*matern(dist, phi, nu);
+                covar_w(i, j) = matern(dist, phi, nu);
             }
         }
-        // check later
     }
     // sample w's
     Eigen::VectorXd mean_w(N);
     std::vector<Eigen::VectorXd> wt_store_vec(T);
     {
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_w, covar_w);
+        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_w, sigma_w*covar_w);
         for (int t = 0; t <= T-1; ++t) {
             wt_store_vec[t] = normal_sampler.samples(1);
         }
     }
 
-    //O_t calculation (aribtrary beta parameter)
+    //O_t calculation (arbitrary beta parameter)
 
 
     std::vector<Eigen::VectorXd> ot_store_vec(T+1);
     {
         // normal sampler for initial O_0; take same cov matrix as for w_t, but mean different from 0
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mu_0, covar_w*sigma_0 /sigma_w );
+        Eigen::EigenMultivariateNormal<double> normal_sampler(mu_0, covar_w*sigma_0);
         Eigen::VectorXd o_initial = normal_sampler.samples(1);
         ot_store_vec[0] = o_initial;
         for (int t = 1; t <= T ; t++) {
-            ot_store_vec[t] = rho * ot_store_vec[t-1] + xt_store_vec[t-1]*beta;
+            ot_store_vec[t] = rho * ot_store_vec[t-1] + xt_store_vec[t-1]*beta + wt_store_vec[t];
         }
 
     }
@@ -154,30 +148,20 @@ int main(int argc,char* argv[]) {
         }
 
     }
-    //    y_data::full_y y;
 
     // Y_t data calculation
     std::vector<Eigen::VectorXd> yt_store_vec(T);
     {
-        for (int t = 0; t <= T-1; t++) {
+        for (int t = 0; t < T; t++) {
             yt_store_vec[t] = ot_store_vec[t+1] + epst_store_vec[t];
-            /*y_data::vector* y_vector = y.add_vec_t();
-            y_vector->set_t(t);
-            y_vector->mutable_vec_value()-> Add(yt_store_vec[t].begin(), yt_store_vec[t].end());*/
-            // copy data vector to protobuf
         }
     }
     ///////// DATA GENERATION END /////////
 
-    // some matrix calculations
-    Eigen::MatrixXd covar_inv = covar_w.inverse();
-    Eigen::MatrixXd S_0 = covar_w/sigma_w;
-    Eigen::MatrixXd S_0_inv = S_0.inverse();
-
     unsigned int n_iter = 3000;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-    ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho);
+    ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps, sigma_w, sigma_0);
     a.sample();
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

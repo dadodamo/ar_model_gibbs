@@ -15,6 +15,7 @@
 #include <random>
 #include<string>
 #include "../debug_functions/debug.h"
+#include "../protocpp/serialize.h"
 
 // DEBUG MODE
 
@@ -44,7 +45,11 @@ class ar_model {
         Eigen::VectorXd mu_0;
 
         double phi = 1.;
-        double nu = 1.;
+        double nu = 0.5;
+
+        double sigma_eps_true;
+        double sigma_w_true;
+        double sigma_0_true;
 
         // matern matrix
         Eigen::MatrixXd matern_inv;
@@ -57,7 +62,7 @@ class ar_model {
         double rho_sig_prior = 1;
 
         //mu_0 prior
-        double mu0_sig_prior = 1;
+        double mu0_sig_prior = 100;
 
         //inverse gamma group 
         std::pair<double, double> ab_eps_prior = {1,1};
@@ -69,6 +74,7 @@ class ar_model {
         u_int64_t seed;
 
 
+
     public:
         ar_model(unsigned int n, unsigned int T, 
         std::vector<Eigen::VectorXd>& y_store,
@@ -77,7 +83,11 @@ class ar_model {
         std::vector<Eigen::VectorXd> ot_store,
         Eigen::VectorXd beta,
         Eigen::VectorXd mu_0,
-        double rho, bool use_cholesky = false,
+        double rho,
+        double sigma_eps_true,
+        double sigma_w_true,
+        double sigma_0_true,
+        bool use_cholesky = false,
         u_int64_t seed = 1):
         y(y_store), X(x_store),
         coordinates(coord_vec),
@@ -85,6 +95,9 @@ class ar_model {
         beta_true(beta),
         mu_0_true(mu_0),
         rho_true(rho),
+        sigma_eps_true(sigma_eps_true),
+        sigma_w_true(sigma_w_true),
+        sigma_0_true(sigma_0_true),
         n_iter(n), T(T),
         use_cholesky(use_cholesky), seed(seed)
         {

@@ -74,6 +74,13 @@ build CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o: CXX_COMPILER__ar_gibbs_De
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
   OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/ar_model
 
+build CMakeFiles/ar_gibbs.dir/protocpp/serialize.cpp.o: CXX_COMPILER__ar_gibbs_Debug /Users/daniel/Desktop/ar_gibbs/protocpp/serialize.cpp || cmake_object_order_depends_target_ar_gibbs
+  DEP_FILE = CMakeFiles/ar_gibbs.dir/protocpp/serialize.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/Users/daniel/Desktop/ar_gibbs/cmake-build-debug -I/usr/local/include
+  OBJECT_DIR = CMakeFiles/ar_gibbs.dir
+  OBJECT_FILE_DIR = CMakeFiles/ar_gibbs.dir/protocpp
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target ar_gibbs
@@ -82,7 +89,7 @@ build CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o: CXX_COMPILER__ar_gibbs_De
 #############################################
 # Link the executable ar_gibbs
 
-build ar_gibbs: CXX_EXECUTABLE_LINKER__ar_gibbs_Debug CMakeFiles/ar_gibbs.dir/main.cpp.o CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o | proto/libproto.a /usr/local/lib/libprotobuf.a || proto/libproto.a
+build ar_gibbs: CXX_EXECUTABLE_LINKER__ar_gibbs_Debug CMakeFiles/ar_gibbs.dir/main.cpp.o CMakeFiles/ar_gibbs.dir/coordinates/coordinates.cpp.o CMakeFiles/ar_gibbs.dir/calc_posterior/posterior.cpp.o CMakeFiles/ar_gibbs.dir/ar_model/ar_class.cpp.o CMakeFiles/ar_gibbs.dir/protocpp/serialize.cpp.o | proto/libproto.a /usr/local/lib/libprotobuf.a || proto/libproto.a
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LINK_LIBRARIES = proto/libproto.a  /usr/local/lib/libprotobuf.a
   OBJECT_DIR = CMakeFiles/ar_gibbs.dir
@@ -163,6 +170,13 @@ build proto/CMakeFiles/proto.dir/o.pb.cc.o: CXX_COMPILER__proto_Debug /Users/dan
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 
+build proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/protocpp/serialize.cpp || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir/__/protocpp
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target proto
@@ -171,7 +185,7 @@ build proto/CMakeFiles/proto.dir/o.pb.cc.o: CXX_COMPILER__proto_Debug /Users/dan
 #############################################
 # Link the static library proto/libproto.a
 
-build proto/libproto.a: CXX_STATIC_LIBRARY_LINKER__proto_Debug proto/CMakeFiles/proto.dir/ydata.pb.cc.o proto/CMakeFiles/proto.dir/xdata.pb.cc.o proto/CMakeFiles/proto.dir/vector_it.pb.cc.o proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o proto/CMakeFiles/proto.dir/o.pb.cc.o
+build proto/libproto.a: CXX_STATIC_LIBRARY_LINKER__proto_Debug proto/CMakeFiles/proto.dir/ydata.pb.cc.o proto/CMakeFiles/proto.dir/xdata.pb.cc.o proto/CMakeFiles/proto.dir/vector_it.pb.cc.o proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o proto/CMakeFiles/proto.dir/o.pb.cc.o proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = proto/CMakeFiles/proto.dir

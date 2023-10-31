@@ -44,6 +44,8 @@ add_executable(ar_gibbs
         calc_posterior/posterior.cpp
         ar_model/ar_class.cpp
         ar_model/ar_class.h
-        debug_functions/debug.h)
+        debug_functions/debug.h
+        protocpp/serialize.h
+        protocpp/serialize.cpp)
 
 TARGET_LINK_LIBRARIES(ar_gibbs proto ${Protobuf_LIBRARIES})
