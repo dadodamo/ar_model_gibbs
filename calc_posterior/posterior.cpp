@@ -94,8 +94,6 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         std::pair<double, double> param;
         param.first = a_prior + 0.5 * n*T;
         double temp = 0;
-        Eigen::VectorXd v = 3*Eigen::VectorXd::Ones(n);
-        Eigen::MatrixXd id_n = Eigen::MatrixXd::Identity(n, n);
         for (int t = 1; t <o_store_vec.size(); t++) {
             Eigen::VectorXd v = (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta);
             temp += v.transpose() * matern_inv * v;
