@@ -92,12 +92,15 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
                                              const unsigned int& n,const unsigned  int& T ,const std::vector<Eigen::MatrixXd>& x_store_vec, const Eigen::MatrixXd& matern_inv ,
                                              std::vector<Eigen::VectorXd>& o_store_vec, Eigen::VectorXd& beta, double& rho){
         std::pair<double, double> param;
-        param.first = a_prior + n*T /2;
+        param.first = a_prior + 0.5 * n*T;
         double temp = 0;
+        Eigen::VectorXd v = 3*Eigen::VectorXd::Ones(n);
+        Eigen::MatrixXd id_n = Eigen::MatrixXd::Identity(n, n);
         for (int t = 1; t <o_store_vec.size(); t++) {
-            temp += (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta).transpose() * matern_inv * (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta);
+            Eigen::VectorXd v = (o_store_vec[t] - rho *o_store_vec[t-1]  - x_store_vec[t-1] * beta);
+            temp += v.transpose() * matern_inv * v;
         }
-        param.second = b_prior +  temp/2;
+        param.second = b_prior + 0.5* temp;
         return param;
     };
     std::pair<double, double> post::calc_a_b_sigma_0(const double& a_prior, const double& b_prior,

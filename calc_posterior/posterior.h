@@ -1,5 +1,5 @@
 #include<cmath>
-#include "Eigen/dense"
+#include "Eigen/Dense"
 #include <iostream>
 #include<cmath>
 
@@ -36,7 +36,7 @@ namespace post {
     Eigen::MatrixXd calc_cov_eff_t(double& sigma_eps, Eigen::MatrixXd& covar_w_inv, double& rho);
 
     std::pair<double, double> calc_a_b_sigma_eps(const double& a_prior, const double& b_prior,
-                                               const const unsigned int& n,const  unsigned int& T ,const std::vector<Eigen::VectorXd>& y_store_vec, std::vector<Eigen::VectorXd>& o_store_vec);
+                                               const unsigned int& n,const  unsigned int& T ,const std::vector<Eigen::VectorXd>& y_store_vec, std::vector<Eigen::VectorXd>& o_store_vec);
     std::pair<double, double> calc_a_b_sigma_w(const double& a_prior,const double& b_prior,
                                              const unsigned int& n,const unsigned  int& T , const std::vector<Eigen::MatrixXd>& x_store_vec, const Eigen::MatrixXd& matern_inv ,
                                              std::vector<Eigen::VectorXd>& o_store_vec, Eigen::VectorXd& beta, double& rho);

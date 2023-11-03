@@ -131,7 +131,7 @@ msg_sig_w <- read(scalar.full_scalar_it, binary_data_sig_w)
 list_sig_w <- as.list(msg_sig_w$scalar)
 
 sig_w <- sapply(list_sig_w, function(x){x$value});
-plot(sig_w[2000:3000], type = 'l',col = "grey", main = "true value = 5")
+plot(sig_w[2000:3000], type = 'l', main = "true value = 5")
 lines(1:1000, rep(5, 1000), type = 'l', col = "green")
 mean(sig_w)
 
@@ -167,6 +167,7 @@ for(i in seq(1, 149951, 50)){
   col = col + 1;
 }
 plot(o0[1,], type = "l", col = "grey")  
+mean(o0[1,])
 plot(o0[2,2000:3000], type = "l")
 plot(o0[3,2000:3000], type = "l")
 plot(o0[4,2000:3000], type = "l")

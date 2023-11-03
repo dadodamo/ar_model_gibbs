@@ -30,7 +30,7 @@ int main(int argc,char* argv[]) {
 
     // all fixed parameters
     double phi = 1.0;
-    double nu = 1;
+    double nu = 1.;
     double rho = 0.8;
 
     //

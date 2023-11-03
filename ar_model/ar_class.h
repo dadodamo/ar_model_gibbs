@@ -45,7 +45,7 @@ class ar_model {
         Eigen::VectorXd mu_0;
 
         double phi = 1.;
-        double nu = 0.5;
+        double nu = 1.;
 
         double sigma_eps_true;
         double sigma_w_true;
@@ -107,11 +107,12 @@ class ar_model {
             Eigen::MatrixXd matern_cov = Eigen::MatrixXd::Zero(N,N);
             for (int i = 0; i < N; ++i) {
                 for (int j = 0; j < N; ++j) {
-                    double dist = eucl_dist(coordinates[i], coordinates[j]) ;//eucl_dist((*coordinates)[i], (*coordinates)[j]);
+                    double dist = eucl_dist(coordinates[i], coordinates[j]) ;
                     matern_cov(i, j) = matern(dist, phi, nu);
                  }
             }
-            matern_inv = matern_cov.inverse();
+            Eigen::MatrixXd id_N = Eigen::VectorXd::Ones(N).asDiagonal();
+            matern_inv = matern_cov.fullPivLu().solve(id_N);
         };
         void sample() const;
 };
