@@ -99,7 +99,6 @@ int main(int argc,char* argv[]) {
         coord c9(35, 5);
         coord c10(8, 5);
         coord_store_vec = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10};
-
         //matern correlation matrix
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
@@ -120,7 +119,6 @@ int main(int argc,char* argv[]) {
 
     //O_t calculation (arbitrary beta parameter)
 
-
     std::vector<Eigen::VectorXd> ot_store_vec(T+1);
     {
         // normal sampler for initial O_0; take same cov matrix as for w_t, but mean different from 0
@@ -128,12 +126,9 @@ int main(int argc,char* argv[]) {
         Eigen::VectorXd o_initial = normal_sampler.samples(1);
         ot_store_vec[0] = o_initial;
         for (int t = 1; t <= T ; t++) {
-            ot_store_vec[t] = rho * ot_store_vec[t-1] + xt_store_vec[t-1]*beta + wt_store_vec[t];
+            ot_store_vec[t] = rho * ot_store_vec[t-1] + xt_store_vec[t-1]*beta + wt_store_vec[t-1];
         }
-
     }
-
-
     // Eps data generation
     std::vector<Eigen::VectorXd> epst_store_vec(T);
     {
@@ -157,7 +152,6 @@ int main(int argc,char* argv[]) {
         }
     }
     ///////// DATA GENERATION END /////////
-
     unsigned int n_iter = 3000;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 

@@ -119,7 +119,7 @@ plot(sig_eps[2000:3000], type = 'l', col = 'grey', main = "sig_eps true value : 
 lines(1:1000, rep(2, 1000), type = 'l', col = "green")
 mean(sig_eps)
 
-plot(seq(0,10,0.01), dinvgamma(seq(0,10,0.01), shape = 0.1, rate = 1), type = 'l')
+plot(seq(0,10,0.01), dinvgamma(seq(0,10,0.01), shape = 1000, rate = 1), type = 'l')
 
 ## sig_w
 dev.off()
