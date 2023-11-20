@@ -1,6 +1,7 @@
 #include<cmath>
 #include "Eigen/Dense"
 #include <iostream>
+#include "eigenmvn.h"
 #include<cmath>
 
 /// data type specified. maybe good in future to template the data structure class ?
@@ -21,7 +22,7 @@ namespace post {
 
 // O_T
     Eigen::VectorXd calc_mean_eff_T(const Eigen::VectorXd& y_T,const Eigen::MatrixXd& x_T, Eigen::MatrixXd& covar_w_inv, Eigen::VectorXd& o_prev,
-                                           Eigen::VectorXd& beta, double& sigma_eps, double& rho);
+                                           Eigen::VectorXd& beta, double& rho,  double& sigma_eps);
     Eigen::MatrixXd calc_cov_eff_T(double& sigma_eps, Eigen::MatrixXd& covar_w_inv);
 
 // O_0
@@ -41,7 +42,7 @@ namespace post {
                                              const unsigned int& n,const unsigned  int& T , const std::vector<Eigen::MatrixXd>& x_store_vec, const Eigen::MatrixXd& matern_inv ,
                                              std::vector<Eigen::VectorXd>& o_store_vec, Eigen::VectorXd& beta, double& rho);
     std::pair<double, double> calc_a_b_sigma_0(const double& a_prior,const double& b_prior,
-                                             const unsigned int& n, const unsigned int& T, const Eigen::MatrixXd& S_0_inv , Eigen::VectorXd& o_0, Eigen::VectorXd& mu_0);
+                                             const unsigned int& n, const Eigen::MatrixXd& S_0_inv , Eigen::VectorXd& o_0, Eigen::VectorXd& mu_0);
 
     Eigen::VectorXd calc_mean_mu_0(const Eigen::MatrixXd& S_0_inv, Eigen::VectorXd& o_0, double& sigma_0);
     Eigen::MatrixXd calc_cov_mu_0(const Eigen::MatrixXd& S_0_inv, double& sigma_0,const double& sigma_mu_prior);

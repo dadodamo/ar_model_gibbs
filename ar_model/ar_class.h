@@ -41,11 +41,10 @@ class ar_model {
         Eigen::VectorXd mu_0_true;
 
         Eigen::VectorXd beta;
-        double rho;
         Eigen::VectorXd mu_0;
 
-        double phi = 1.;
-        double nu = 1.;
+        double phi;
+        double nu;
 
         double sigma_eps_true;
         double sigma_w_true;
@@ -54,20 +53,21 @@ class ar_model {
         // matern matrix
         Eigen::MatrixXd matern_inv;
 
+
+        // priors chosen as in spTimer paper suggested
         //beta prior
-        double beta_sig_prior = 1;
+        double beta_sig_prior = 1000000.;
         
-        // rho 
-        double rho_mean_prior = 0;
-        double rho_sig_prior = 1;
+        // rho
+        double rho_sig_prior = 1000000.;
 
         //mu_0 prior
-        double mu0_sig_prior = 100;
+        double mu0_sig_prior = 100000.;
 
         //inverse gamma group 
-        std::pair<double, double> ab_eps_prior = {1,1};
-        std::pair<double, double> ab_w_prior = {1,1};
-        std::pair<double, double> ab_0_prior = {1,1};
+        std::pair<double, double> ab_eps_prior = {2,1};
+        std::pair<double, double> ab_w_prior = {2,1};
+        std::pair<double, double> ab_0_prior = {2,1};
 
         // algo options
         bool use_cholesky;
@@ -80,40 +80,18 @@ class ar_model {
         std::vector<Eigen::VectorXd>& y_store,
         std::vector<Eigen::MatrixXd>& x_store,
         std::vector<coord>& coord_vec,
-        std::vector<Eigen::VectorXd> ot_store,
-        Eigen::VectorXd beta,
-        Eigen::VectorXd mu_0,
-        double rho,
-        double sigma_eps_true,
-        double sigma_w_true,
-        double sigma_0_true,
+        std::vector<Eigen::VectorXd>& ot_store,
+        Eigen::VectorXd& beta,
+        Eigen::VectorXd& mu_0,
+        double& rho,
+        double& sigma_eps_true,
+        double& sigma_w_true,
+        double& sigma_0_true,
+        double& phi,
+        double& nu,
         bool use_cholesky = false,
-        u_int64_t seed = 1):
-        y(y_store), X(x_store),
-        coordinates(coord_vec),
-        ot(ot_store),
-        beta_true(beta),
-        mu_0_true(mu_0),
-        rho_true(rho),
-        sigma_eps_true(sigma_eps_true),
-        sigma_w_true(sigma_w_true),
-        sigma_0_true(sigma_0_true),
-        n_iter(n), T(T),
-        use_cholesky(use_cholesky), seed(seed)
-        {
-            N = (X)[0].rows();
-            p = (X)[0].cols();
+        u_int64_t seed = 1);
 
-            Eigen::MatrixXd matern_cov = Eigen::MatrixXd::Zero(N,N);
-            for (int i = 0; i < N; ++i) {
-                for (int j = 0; j < N; ++j) {
-                    double dist = eucl_dist(coordinates[i], coordinates[j]) ;
-                    matern_cov(i, j) = matern(dist, phi, nu);
-                 }
-            }
-            Eigen::MatrixXd id_N = Eigen::VectorXd::Ones(N).asDiagonal();
-            matern_inv = matern_cov.fullPivLu().solve(id_N);
-        };
         void sample() const;
 };
 

@@ -21,19 +21,25 @@
 
 int main(int argc,char* argv[]) {
 
-    // data generation of model using T = 10, N = 10, p = 5
+    // algo options
+    u_int64_t seed = 112083918;
+    bool b = false;
+
+    // data generation of model using T = 299, N = 10, p = 5
     // can be rewritten with generic param, as class+methods or function
-    const unsigned int T = 50;
+
+    const unsigned int T = 199;
     const unsigned int p = 5;
     const unsigned int N = 10;
 
 
     // all fixed parameters
-    double phi = 1.0;
-    double nu = 1.;
-    double rho = 0.8;
+    double phi = 0.05;
+    double nu = 2.;
+    double rho = 0.5;
 
-    //
+    // mu and beta
+
     Eigen::VectorXd beta(p) ;
     beta << 1, 2, 3, 4, 5;
 
@@ -43,21 +49,21 @@ int main(int argc,char* argv[]) {
     }
 
     // model variance components
-    double sigma_eps = 2.;
-    double sigma_w = 5.;
-    double sigma_0 = 1.0;
+    double sigma_eps = 1.;
+    double sigma_w = 1.;
+    double sigma_0 = 1.;
 
     //priors, to pass if needed
-    double sigma_mu_0_prior = 1;
-
-    double sig_eps_a_prior = 0.5;
-    double sig_eps_b_prior = 0.5;
-
-    double sig_w_a_prior = 0.5;
-    double sig_w_b_prior = 0.5;
-
-    double sig_0_a_prior = 0.5;
-    double sig_0_b_prior = 0.5;
+//    double sigma_mu_0_prior = 1;
+//
+//    double sig_eps_a_prior = 0.5;
+//    double sig_eps_b_prior = 0.5;
+//
+//    double sig_w_a_prior = 0.5;
+//    double sig_w_b_prior = 0.5;
+//
+//    double sig_0_a_prior = 0.5;
+//    double sig_0_b_prior = 0.5;
 
 
 
@@ -68,14 +74,13 @@ int main(int argc,char* argv[]) {
 
     // sampler from external header file (OK)
     {
-        Eigen::VectorXd mean_X(N);
-        Eigen::MatrixXd covar_X(N, N);
+        Eigen::VectorXd mean_X = Eigen::VectorXd::Zero(N);
+        Eigen::MatrixXd covar_X = Eigen::MatrixXd::Identity(N,N);
         for (int i = 0; i < N; ++i) {
             mean_X(i) = 0;
-            covar_X(i, i) = 1;
         }
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_X, covar_X);
-        for (int t = 0; t <= T-1; ++t) {
+        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_X, covar_X, b, seed);
+        for(int t = 0; t < xt_store_vec.size(); ++t) {
             Eigen::MatrixXd X(N, p);
             X = normal_sampler.samples(p);
             xt_store_vec[t] = X;
@@ -83,7 +88,7 @@ int main(int argc,char* argv[]) {
     }
 
     // w_t generation + generate coord points
-    Eigen::MatrixXd covar_w(N, N);
+    Eigen::MatrixXd matern_cov = Eigen::MatrixXd::Zero(N,N);
     // calculation of covar matrix
     std::vector<coord> coord_store_vec(10);
     {
@@ -103,42 +108,44 @@ int main(int argc,char* argv[]) {
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
                 double dist = eucl_dist(coord_store_vec[i], coord_store_vec[j]);
-                covar_w(i, j) = matern(dist, phi, nu);
+                matern_cov(i, j) = matern(dist, phi, nu);
             }
         }
     }
     // sample w's
-    Eigen::VectorXd mean_w(N);
+    Eigen::VectorXd mean_w = Eigen::VectorXd::Zero(N);
     std::vector<Eigen::VectorXd> wt_store_vec(T);
     {
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_w, sigma_w*covar_w);
-        for (int t = 0; t <= T-1; ++t) {
+        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_w, sigma_w*matern_cov, b, seed);
+        for (int t = 0; t < wt_store_vec.size(); ++t) {
             wt_store_vec[t] = normal_sampler.samples(1);
         }
     }
-
     //O_t calculation (arbitrary beta parameter)
 
     std::vector<Eigen::VectorXd> ot_store_vec(T+1);
     {
         // normal sampler for initial O_0; take same cov matrix as for w_t, but mean different from 0
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mu_0, covar_w*sigma_0);
+        Eigen::MatrixXd cov = matern_cov*sigma_0;
+        Eigen::EigenMultivariateNormal<double> normal_sampler(mu_0, cov, b, seed);
         Eigen::VectorXd o_initial = normal_sampler.samples(1);
         ot_store_vec[0] = o_initial;
-        for (int t = 1; t <= T ; t++) {
+        for (int t = 1; t < ot_store_vec.size() ; t++) {
             ot_store_vec[t] = rho * ot_store_vec[t-1] + xt_store_vec[t-1]*beta + wt_store_vec[t-1];
+
         }
-    }
+    };
+
     // Eps data generation
     std::vector<Eigen::VectorXd> epst_store_vec(T);
     {
-        Eigen::VectorXd mean_eps(N); // init is (I think) always to 0
-        Eigen::MatrixXd covar_eps(N, N);
+        Eigen::VectorXd mean_eps = Eigen::VectorXd::Zero(N);
+        Eigen::MatrixXd covar_eps = Eigen::MatrixXd::Zero(N,N);
         for (int i = 0; i < N; ++i) {
             covar_eps(i, i) = sigma_eps;
         }
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_eps, covar_eps);
-        for (int t = 0; t <= T-1; ++t) {
+        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_eps, covar_eps, b, seed);
+        for (int t = 0; t < T; ++t) {
             epst_store_vec[t] = normal_sampler.samples(1);
         }
 
@@ -152,11 +159,14 @@ int main(int argc,char* argv[]) {
         }
     }
     ///////// DATA GENERATION END /////////
-    unsigned int n_iter = 3000;
+
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-    ar_model a(n_iter, T,yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps, sigma_w, sigma_0);
-    a.sample();
+        unsigned int n_iter = 5000;
+
+        ar_model a(n_iter, T, yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
+                   sigma_w, sigma_0, phi, nu, b, seed);
+        a.sample();
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Time elapsed = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
