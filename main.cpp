@@ -70,7 +70,6 @@ int main(int argc,char* argv[]) {
 
     std::vector<Eigen::MatrixXd> xt_store_vec(T);
 
-    // sampler from external header file (OK)
     {
         Eigen::VectorXd mean_X = Eigen::VectorXd::Zero(N);
         Eigen::MatrixXd covar_X = Eigen::MatrixXd::Identity(N,N);
@@ -161,10 +160,17 @@ int main(int argc,char* argv[]) {
 
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-        unsigned int n_iter = 5000;
-        ar_model a(n_iter, T, yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
-                   sigma_w, sigma_0, phi, nu, b, seed);
+
+    ar_model a(yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
+               sigma_w, sigma_0, phi, nu);
+    a.init();
+    unsigned int n_iter = 5000;
+    for (int i = 0; i < n_iter; ++i) {
         a.sample();
+        a.write_curr_state();
+        std::cout << "Iteration " << i << " finished" << std::endl;
+    }
+    a.serialize();
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Time elapsed = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
