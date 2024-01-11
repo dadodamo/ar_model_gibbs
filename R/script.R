@@ -1,4 +1,4 @@
-library("RProtoBuf")
+library( "RProtoBuf")
 setwd("/users/daniel/desktop/ar_gibbs")
 
 
@@ -16,21 +16,33 @@ list_beta <- as.list(msg_beta$vec_t)
 
 betas <- sapply(list_beta, function(x){x$vec_value});
 
+beta_true <- c(
+  0.52218,
+  -1.09668,
+  -0.415183,
+  -1.27539,
+  -0.032302
+)
 
 ## beta only sample  
 dev.off()
 par(mfrow = c(5, 1))
 par(mar = c(2, 4, 2, 1))
+for (i in 1:5) {
+  plot(betas[i,1000:5000], type='l' ,main = "betas", col = 'grey')
+  lines(1:4000, rep(beta_true[i], 4000), col = "green", type = 'l')  
+}
+
 plot(betas[1,1000:5000], type='l' ,main = "betas", col = 'grey')
-lines(1:4000, rep(1, 4000), col = "green", type = 'l')
-plot(betas[2,1000:5000], type='l', col = 'grey')
-lines(1:4000, rep(2, 4000), col = "green", type = 'l')
-plot(betas[3,1000:5000], type='l', col = 'grey')
-lines(1:4000, rep(3, 4000), col = "green", type = 'l')
-plot(betas[4,1000:5000], type='l', col = 'grey')
-lines(1:4000, rep(4, 4000), col = "green", type = 'l')
-plot(betas[5,1000:5000], type='l', col = 'grey')
-lines(1:4000, rep(5, 4000), col = "green", type = 'l')
+lines(1:4000, rep(beta_true[1], 4000), col = "green", type = 'l')
+#plot(betas[2,1000:5000], type='l', col = 'grey')
+#lines(1:4000, rep(2, 4000), col = "green", type = 'l')
+#plot(betas[3,1000:5000], type='l', col = 'grey')
+#lines(1:4000, rep(3, 4000), col = "green", type = 'l')
+#plot(betas[4,1000:5000], type='l', col = 'grey')
+#lines(1:4000, rep(4, 4000), col = "green", type = 'l')
+#plot(betas[5,1000:5000], type='l', col = 'grey')
+#lines(1:4000, rep(5, 4000), col = "green", type = 'l')
 
 dev.off()
 par(mfrow = c(5, 1))
@@ -98,10 +110,23 @@ mu0 <- sapply(list_mu0, function(x){x$vec_value});
 dev.off()
 par(mfrow = c(5, 2))
 par(mar = c(2, 4, 2, 1))
+mu_0_true <- c(
+  1.44256,
+  0.540784,
+  -0.00554277,
+  -1.18828,
+  -0.340807,
+  0.815028,
+  -1.37403,
+  -0.486838,
+  -0.272475,
+  1.639
+)
 for (i in 1:10) {
   plot(mu0[i,1000:5000], main = paste("mu ", i) ,  type = 'l', col = 'grey');
-  lines(1:4000, rep(i+1, 4000), type = 'l', col = "green");
+  lines(1:4000, rep(mu_0_true[i], 4000), type = 'l', col = "green");
 }
+mean(mu0[2,])
 
 
 ##### plot of variance components
@@ -118,8 +143,6 @@ list_sig_eps <- as.list(msg_sig_eps$scalar)
 sig_eps <- sapply(list_sig_eps, function(x){x$value});
 dev.off()
 plot(sig_eps[1000:5000], type = 'l', col = 'grey', main = "sig_eps true value : 1")
-plot(sig_eps[500:700], type = 'l', col = 'grey', main = "sig_eps true value : 2")
-plot(sig_eps, type = 'l', col = 'grey', main = "sig_eps true value : 2")
 lines(1:4000, rep(1, 4000), type = 'l', col = "green")
 var(sig_eps)
 mean(sig_eps)
@@ -159,14 +182,28 @@ mean(sig_0)
 
 x = seq(0,100,0.01);
 dev.off()
-plot(x, dinvgamma(x,7, 7), type = 'l', xlim = c(0,2))
+plot(x, dinvgamma(x,1, 100), type = 'l', xlim = c(0,10))
+
+
+### phi
+file_path_phi <- "cmake-build-debug/phi_serialized.bin"  
+binary_data_phi <- readBin(file_path_phi, "raw", file.info(file_path_phi)$size)
+
+msg_phi <- read(scalar.full_scalar_it, binary_data_phi)
+
+list_phi <- as.list(msg_phi$scalar)
+
+phi <- sapply(list_phi, function(x){x$value});
+
+plot(phi[1000:5000], type = 'l', col = 'grey')
+
+
 
 #### o's
 matrix_proto <- RProtoBuf::readProtoFiles(files = "proto/o.proto")
 file_path_o <- "cmake-build-debug/o_serialized.bin"  
 binary_data_o <- readBin(file_path_o, "raw", file.info(file_path_o)$size)
 msg_o <- read(o_data.full_o_it, binary_data_o)
-list_o <- as.list(msg_o$m)
 list_o <- as.list(msg_o$m)
 o <- sapply(list_o, function(x){x$vec});
 o <- sapply(o, function(x){x$vec_value});

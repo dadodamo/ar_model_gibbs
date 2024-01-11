@@ -10,6 +10,7 @@
 #include "../cmake-build-debug/proto/o.pb.h"
 #include "../cmake-build-debug/proto/scalar_it.pb.h"
 #include "../cmake-build-debug/proto/vector_it.pb.h"
+#include "../cmake-build-debug/proto/paramdata.pb.h"
 #include <fstream>
 #include "../calc_posterior/posterior.h"
 #include <random>
@@ -35,39 +36,43 @@ class ar_model {
         std::vector<coord> coordinates;
 
         //debug
-        std::vector<Eigen::VectorXd> ot;
+        std::vector<Eigen::VectorXd> o_store_true;
+        std::vector<Eigen::VectorXd> o_store;
+        Eigen::VectorXd beta;
+        Eigen::VectorXd mu_0;
+        double rho;
         Eigen::VectorXd beta_true;
         double rho_true;
         Eigen::VectorXd mu_0_true;
 
-        Eigen::VectorXd beta;
-        Eigen::VectorXd mu_0;
-
         double phi;
+        double phi_true;
         double nu;
+
+        double sigma_eps;
+        double sigma_w;
+        double sigma_0;
 
         double sigma_eps_true;
         double sigma_w_true;
         double sigma_0_true;
 
-        // matern matrix
-        Eigen::MatrixXd matern_inv;
-
-
         // priors chosen as in spTimer paper suggested
         //beta prior
-        double beta_sig_prior = 1000000.;
+        double beta_sig_prior = 1;
         
         // rho
-        double rho_sig_prior = 1000000.;
+        double rho_sig_prior = 1.;
 
         //mu_0 prior
-        double mu0_sig_prior = 100000.;
+        double mu0_sig_prior = 1.;
 
         //inverse gamma group 
         std::pair<double, double> ab_eps_prior = {2,1};
         std::pair<double, double> ab_w_prior = {2,1};
         std::pair<double, double> ab_0_prior = {2,1};
+        std::pair<double, double> ab_phi_prior = {1,  5};
+        double phi_cand_var = 0.1;
 
         // algo options
         bool use_cholesky;
@@ -87,12 +92,12 @@ class ar_model {
         double& sigma_eps_true,
         double& sigma_w_true,
         double& sigma_0_true,
-        double& phi,
+        double& phi_true,
         double& nu,
         bool use_cholesky = false,
         u_int64_t seed = 1);
 
-        void sample() const;
+        void sample();
 };
 
 #endif

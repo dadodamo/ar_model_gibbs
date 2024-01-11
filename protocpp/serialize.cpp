@@ -61,9 +61,23 @@ void proto::serialize_rho(scalar::full_scalar_it& rho_stream){
     } else {
         std::cerr << "Error: Unable to open the output file." << std::endl;
     }
-
-
 };
+
+void proto::serialize_phi(scalar::full_scalar_it& phi_stream){
+    std::string serialized_phi;
+    if (!phi_stream.SerializeToString(&serialized_phi)) {
+        std::cerr << "Failed to write phi data." << std::endl;
+    }
+    std::ofstream outputFile_phi("phi_serialized.bin", std::ios::binary);
+    if (outputFile_phi.is_open()) {
+        outputFile_phi.write(serialized_phi.c_str(), serialized_phi.size());
+        outputFile_phi.close();
+        std::cout << "Serialized data written to phi_serialized.bin" << std::endl;
+    } else {
+        std::cerr << "Error: Unable to open the output file." << std::endl;
+    }
+};
+
 void proto::serialize_sig_0(scalar::full_scalar_it& sig_0_stream){
     std::string serialized_sig_0;
     if (!sig_0_stream.SerializeToString(&serialized_sig_0)) {

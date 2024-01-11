@@ -1,11 +1,5 @@
 #include <iostream>
 #include "Eigen/Dense"
-// needed maybe later
-#include<boost/math/distributions.hpp>
-#include<boost/random/normal_distribution.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include "boost/random.hpp"
-//
 #include "eigenmvn.h"
 #include "matern.h"
 #include "calc_posterior/posterior.h"
@@ -34,23 +28,27 @@ int main(int argc,char* argv[]) {
 
 
     // all fixed parameters
-    double phi = 0.05;
+    double phi = 0.1;
     double nu = 2.;
     double rho = 0.5;
 
     // mu and beta
-
+    Eigen::EigenMultivariateNormal<double> normal_sampler(Eigen::VectorXd::Zero(p), Eigen::MatrixXd::Identity(p,p), b, seed);
     Eigen::VectorXd beta(p) ;
-    beta << 1, 2, 3, 4, 5;
+    beta = normal_sampler.samples(1);
 
     Eigen::VectorXd mu_0(N);
-    for (int i = 0; i <N ; ++i) {
-        mu_0(i) = i + 2;
-    }
+    normal_sampler.setMean(Eigen::VectorXd::Zero(N));
+    normal_sampler.setCovar(Eigen::MatrixXd::Identity(N,N));
+    mu_0 = normal_sampler.samples(1);
+
+//    for (int i = 0; i <N ; ++i) {
+//        mu_0(i) = i;
+//    }
 
     // model variance components
-    double sigma_eps = 1.;
-    double sigma_w = 1.;
+    double sigma_eps = .9;
+    double sigma_w = .1;
     double sigma_0 = 1.;
 
     //priors, to pass if needed
@@ -79,7 +77,8 @@ int main(int argc,char* argv[]) {
         for (int i = 0; i < N; ++i) {
             mean_X(i) = 0;
         }
-        Eigen::EigenMultivariateNormal<double> normal_sampler(mean_X, covar_X, b, seed);
+        normal_sampler.setMean(mean_X);
+        normal_sampler.setCovar(covar_X);
         for(int t = 0; t < xt_store_vec.size(); ++t) {
             Eigen::MatrixXd X(N, p);
             X = normal_sampler.samples(p);
@@ -163,7 +162,6 @@ int main(int argc,char* argv[]) {
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         unsigned int n_iter = 5000;
-
         ar_model a(n_iter, T, yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
                    sigma_w, sigma_0, phi, nu, b, seed);
         a.sample();

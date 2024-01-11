@@ -113,5 +113,30 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
         Eigen::MatrixXd cov =  S_0_inv/sigma_0 +  id_mat/sigma_mu_prior;
         return cov.inverse();
     };
+    double post::target_ratio_phi(double& curr_phi, double& cand_phi, Eigen::MatrixXd& coord_mat, std::vector<Eigen::VectorXd> o_store,const std::vector<Eigen::MatrixXd> x_store, Eigen::VectorXd& beta,
+                                  Eigen::VectorXd& mu_0, double& rho, double& sigma_w, double& sigma_0, std::pair<double, double>& ab_phi_prior, double& nu) {
+        Eigen::MatrixXd cand_matern_mat = calc_matern_mat(coord_mat, cand_phi, nu);
+        Eigen::MatrixXd cand_matern_inv = cand_matern_mat.inverse();
+        Eigen::MatrixXd curr_matern_mat = calc_matern_mat(coord_mat, curr_phi, nu);
+        Eigen::MatrixXd curr_matern_inv = curr_matern_mat.inverse();
+        double sum_cand = 0;
+        double sum_curr = 0;
+        for (int t = 1; t < x_store.size(); ++t) {
 
+
+            sum_cand +=  (o_store[t] - rho*o_store[t-1] - x_store[t-1]*beta).transpose()*cand_matern_inv *(o_store[t] - rho*o_store[t-1] - x_store[t-1]*beta);
+            sum_curr += (o_store[t] - rho*o_store[t-1] - x_store[t-1]*beta).transpose()*curr_matern_inv *(o_store[t] - rho*o_store[t-1] - x_store[t-1]*beta);
+        }
+
+//        double cand_lkhd = exp(-1*pow(cand_phi,2) / 2*var_prior_phi) * pow(cand_matern_mat.determinant(),-1*x_store.size()/2.) * exp(- 1/sigma_w * sum_cand) * pow(cand_matern_mat.determinant(), -0.5)
+//                * exp(-1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *cand_matern_inv*(o_store[0] - mu_0));
+        double log_cand_lkhd = (ab_phi_prior.first - 1)*log(cand_phi) - ab_phi_prior.second*cand_phi  - (x_store.size()/2.)*log(cand_matern_mat.determinant()) - 1/2*sigma_w * sum_cand -0.5* log(cand_matern_mat.determinant())
+                 -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *cand_matern_inv*(o_store[0] - mu_0);
+
+        double log_curr_lkhd =  (ab_phi_prior.first - 1)*log(curr_phi) - ab_phi_prior.second*curr_phi -1/2*sigma_w * sum_curr -0.5* log(curr_matern_mat.determinant())
+                -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *curr_matern_inv*(o_store[0] - mu_0);
+        std::cout << "log_cand_lkhd: "<< log_cand_lkhd<< std::endl;
+        std::cout << "log_curr_lkhd: "<< log_curr_lkhd << std::endl;
+        return exp(log_cand_lkhd - log_curr_lkhd);
+    }
 

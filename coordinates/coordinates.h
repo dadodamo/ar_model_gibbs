@@ -7,6 +7,8 @@
 
 #include<iostream>
 #include <cmath>
+#include<Eigen/Dense>
+#include<../matern.h>
 
 class coord {
 private:
@@ -30,5 +32,7 @@ public:
 };
 
 double eucl_dist(coord& c1, coord& c2);
+
+Eigen::MatrixXd eucl_dist_matrix(std::vector<coord>& coordinates);
 
 #endif //AR_GIBBS_COORDINATES_CPP

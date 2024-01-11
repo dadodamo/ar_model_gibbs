@@ -133,7 +133,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Order-only phony target for proto
 
-build cmake_object_order_depends_target_proto: phony || proto/o.pb.cc proto/o.pb.h proto/scalar_it.pb.cc proto/scalar_it.pb.h proto/vector_it.pb.cc proto/vector_it.pb.h proto/xdata.pb.cc proto/xdata.pb.h proto/ydata.pb.cc proto/ydata.pb.h
+build cmake_object_order_depends_target_proto: phony || proto/o.pb.cc proto/o.pb.h proto/paramdata.pb.cc proto/paramdata.pb.h proto/scalar_it.pb.cc proto/scalar_it.pb.h proto/vector_it.pb.cc proto/vector_it.pb.h proto/xdata.pb.cc proto/xdata.pb.h proto/ydata.pb.cc proto/ydata.pb.h
 
 build proto/CMakeFiles/proto.dir/ydata.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/ydata.pb.cc || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/ydata.pb.cc.o.d
@@ -170,6 +170,13 @@ build proto/CMakeFiles/proto.dir/o.pb.cc.o: CXX_COMPILER__proto_Debug /Users/dan
   OBJECT_DIR = proto/CMakeFiles/proto.dir
   OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
 
+build proto/CMakeFiles/proto.dir/paramdata.pb.cc.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto/paramdata.pb.cc || cmake_object_order_depends_target_proto
+  DEP_FILE = proto/CMakeFiles/proto.dir/paramdata.pb.cc.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/users/daniel/Desktop/libraries/Eigen3 -I/users/daniel/Desktop/libraries/boost -I/users/daniel/Desktop/libraries/math -I/users/daniel/Desktop/libraries/h_files -I/usr/local/include
+  OBJECT_DIR = proto/CMakeFiles/proto.dir
+  OBJECT_FILE_DIR = proto/CMakeFiles/proto.dir
+
 build proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o: CXX_COMPILER__proto_Debug /Users/daniel/Desktop/ar_gibbs/protocpp/serialize.cpp || cmake_object_order_depends_target_proto
   DEP_FILE = proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o.d
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics -std=gnu++17
@@ -185,7 +192,7 @@ build proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o: CXX_COMPILER__prot
 #############################################
 # Link the static library proto/libproto.a
 
-build proto/libproto.a: CXX_STATIC_LIBRARY_LINKER__proto_Debug proto/CMakeFiles/proto.dir/ydata.pb.cc.o proto/CMakeFiles/proto.dir/xdata.pb.cc.o proto/CMakeFiles/proto.dir/vector_it.pb.cc.o proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o proto/CMakeFiles/proto.dir/o.pb.cc.o proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o
+build proto/libproto.a: CXX_STATIC_LIBRARY_LINKER__proto_Debug proto/CMakeFiles/proto.dir/ydata.pb.cc.o proto/CMakeFiles/proto.dir/xdata.pb.cc.o proto/CMakeFiles/proto.dir/vector_it.pb.cc.o proto/CMakeFiles/proto.dir/scalar_it.pb.cc.o proto/CMakeFiles/proto.dir/o.pb.cc.o proto/CMakeFiles/proto.dir/paramdata.pb.cc.o proto/CMakeFiles/proto.dir/__/protocpp/serialize.cpp.o
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = proto/CMakeFiles/proto.dir
@@ -260,6 +267,15 @@ build proto/scalar_it.pb.h proto/scalar_it.pb.cc | ${cmake_ninja_workdir}proto/s
 build proto/o.pb.h proto/o.pb.cc | ${cmake_ninja_workdir}proto/o.pb.h ${cmake_ninja_workdir}proto/o.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/o.proto /usr/local/bin/protoc
   COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/o.proto
   DESC = Running cpp protocol buffer compiler on o.proto
+  restat = 1
+
+
+#############################################
+# Custom command for proto/paramdata.pb.h
+
+build proto/paramdata.pb.h proto/paramdata.pb.cc | ${cmake_ninja_workdir}proto/paramdata.pb.h ${cmake_ninja_workdir}proto/paramdata.pb.cc: CUSTOM_COMMAND /Users/daniel/Desktop/ar_gibbs/proto/paramdata.proto /usr/local/bin/protoc
+  COMMAND = cd /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto && /usr/local/bin/protoc --cpp_out /Users/daniel/Desktop/ar_gibbs/cmake-build-debug/proto -I /Users/daniel/Desktop/ar_gibbs/proto /Users/daniel/Desktop/ar_gibbs/proto/paramdata.proto
+  DESC = Running cpp protocol buffer compiler on paramdata.proto
   restat = 1
 
 # =============================================================================

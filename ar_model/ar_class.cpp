@@ -4,36 +4,27 @@
 ar_model::ar_model(unsigned int n, unsigned int T, std::vector<Eigen::VectorXd> &y_store,
                    std::vector<Eigen::MatrixXd> &x_store, std::vector<coord> &coord_vec,
                    std::vector<Eigen::VectorXd>& ot_store, Eigen::VectorXd& beta, Eigen::VectorXd& mu_0, double& rho,
-                   double& sigma_eps_true, double& sigma_w_true, double& sigma_0_true, double& phi, double& nu,
+                   double& sigma_eps_true, double& sigma_w_true, double& sigma_0_true, double& phi_true, double& nu,
                    bool use_cholesky, u_int64_t seed) :
         y(y_store), X(x_store),
         coordinates(coord_vec),
-        ot(ot_store),
+        o_store_true(ot_store),
         beta_true(beta),
         mu_0_true(mu_0),
         rho_true(rho),
         sigma_eps_true(sigma_eps_true),
         sigma_w_true(sigma_w_true),
         sigma_0_true(sigma_0_true),
-        phi(phi),
+        phi_true(phi_true),
         nu(nu),
         n_iter(n), T(T),
         use_cholesky(use_cholesky), seed(seed)
 {
     N = (X)[0].rows();
     p = (X)[0].cols();
-
-    Eigen::MatrixXd matern_cov = Eigen::MatrixXd::Zero(N,N);
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            double dist = eucl_dist(coordinates[i], coordinates[j]) ;
-            matern_cov(i, j) = matern(dist, phi, nu);
-        }
-    }
-    matern_inv = matern_cov.inverse();
 };
 
-void ar_model::sample() const {
+void ar_model::sample() {
     std::mt19937 generator(seed);
 
     //proto buffers
@@ -44,75 +35,70 @@ void ar_model::sample() const {
     scalar::full_scalar_it sig_0_stream;
     scalar::full_scalar_it sig_w_stream;
     scalar::full_scalar_it sig_eps_stream;
+    scalar::full_scalar_it phi_stream;
+
+
 
     //Identity matrices
-    Eigen::MatrixXd id_p = Eigen::VectorXd::Ones(p).asDiagonal();
-    Eigen::MatrixXd id_N = Eigen::VectorXd::Ones(N).asDiagonal();
 
 
-    //initialization
-//    Eigen::VectorXd beta(p);
-    Eigen::VectorXd beta = beta_true; // debug
-//
-//
-//    std::vector<Eigen::VectorXd> o_store(T+1);
-    std::vector<Eigen::VectorXd> o_store = ot; //debug
-//
-//
-//    Eigen::VectorXd mu_0(N);
-    Eigen::VectorXd mu_0 = mu_0_true; // debug
-
-//    double rho;
-    double rho = rho_true; //debug
-
-//    double sigma_eps;
-    double sigma_eps = sigma_eps_true; //debug
-//    double sigma_w;
-    double sigma_w = sigma_w_true; // debug
-//    double sigma_0;
-    double sigma_0 = sigma_0_true; // debug
+    //initialization DEBUG
+//    Eigen::VectorXd beta = beta_true;
+    std::vector<Eigen::VectorXd> o_store = o_store_true;
+    Eigen::VectorXd mu_0 = mu_0_true;
+    double rho = rho_true;
+    phi = phi_true;
+    double sigma_eps = sigma_eps_true;
+    double sigma_w = sigma_w_true;
+    double sigma_0 = sigma_0_true;
 
     //initialization of samplers
-    Eigen::VectorXd zero_prior_p = Eigen::VectorXd::Zero(p);
-    Eigen::VectorXd zero_prior_N = Eigen::VectorXd::Zero(N);
 
-    Eigen::EigenMultivariateNormal<double> beta_sampler(zero_prior_p, beta_sig_prior*id_p, use_cholesky, seed);
-    Eigen::EigenMultivariateNormal<double> o_sampler(zero_prior_N, id_N, use_cholesky, seed);
-    Eigen::EigenMultivariateNormal<double> mu0_sampler(zero_prior_N, mu0_sig_prior*id_N, use_cholesky, seed);
+    Eigen::EigenMultivariateNormal<double> beta_sampler(Eigen::VectorXd::Zero(p), beta_sig_prior*Eigen::MatrixXd::Identity(p,p), use_cholesky, seed);
+    Eigen::EigenMultivariateNormal<double> o_sampler(Eigen::VectorXd::Zero(N), Eigen::MatrixXd::Identity(N,N), use_cholesky, seed);
+    Eigen::EigenMultivariateNormal<double> mu0_sampler(Eigen::VectorXd::Zero(N), mu0_sig_prior*Eigen::MatrixXd::Identity(N,N), use_cholesky, seed);
     std::normal_distribution<double> rho_sampler(0,sqrt(rho_sig_prior));
     std::gamma_distribution<double> sig_eps_sampler(ab_eps_prior.first, ab_eps_prior.second);
     std::gamma_distribution<double> sig_w_sampler(ab_w_prior.first, ab_w_prior.second);
     std::gamma_distribution<double> sig_0_sampler(ab_0_prior.first, ab_0_prior.second);
+    std::normal_distribution<double> phi_sampler(0,sqrt(phi_cand_var));
+    std::uniform_real_distribution<double> unif(0., 1.);
 
 
     //initialization
-//    {
-        //beta
-//        beta = beta_sampler.samples(1);
 
-        //o vector
-        //initialize all spatial effects to zero at beginning, including index 0
-//        for (int t = 0; t <= T; ++t) {
-//            o_store[t] = Eigen::VectorXd::Zero(N);
-//        }
+    //beta
+    beta = beta_sampler.samples(1);
+//
+//    o vector
+//    initialize all spatial effects to zero at beginning, including index 0
+    o_store = std::vector<Eigen::VectorXd>(T+1);
+    for (int t = 0; t < T+1 ; ++t) {
+        o_store[t] = Eigen::VectorXd::Zero(N);
+    }
 
-        // rho
-//        rho = rho_sampler(generator);
-
-        // mu_0
-//        mu_0 = mu0_sampler.samples(1);
-
-//        sigma_eps = sig_eps_sampler(generator);
-//        sigma_w = sig_w_sampler(generator);
-
-//    }
-
+//   / // rho
+    rho = rho_sampler(generator);
+    phi = 1;
+//
+//     mu_0
+    mu_0 = mu0_sampler.samples(1);
+//
+    sigma_eps = sig_eps_sampler(generator);
+    sigma_w = sig_w_sampler(generator);
+    sigma_0 = sig_0_sampler(generator);
+//
+    Eigen::MatrixXd coord_mat = eucl_dist_matrix(coordinates);
+    Eigen::MatrixXd matern_cov = calc_matern_mat(coord_mat, phi, nu);
+    Eigen::MatrixXd matern_inv = matern_cov.inverse();
+    Eigen::MatrixXd w_full_cov_inv =  matern_inv/sigma_w;
     // for n_iter loop: update o_store, then update beta, then update rho. write in proto files results after iteration
 
     for(int i = 0; i < n_iter; ++i) {
-        //update covar inverse
-        Eigen::MatrixXd w_full_cov_inv =  matern_inv/sigma_w;
+
+
 //        o_store update
+
 
         o_data::matrix* o_matrix= o_stream.add_m();
         o_matrix->set_iter(i);
@@ -123,7 +109,6 @@ void ar_model::sample() const {
         o_sampler.setMean(o_zero_update_mean);
         o_sampler.setCovar(o_zero_update_cov);
         o_store[0] = o_sampler.samples(1);
-
 //
 //
 //        // write in proto file
@@ -157,7 +142,6 @@ void ar_model::sample() const {
         o_T_vector->set_t(T);
 //
 //         mu_0 update
-//
         Eigen::MatrixXd mu0_update_cov = post::calc_cov_mu_0(matern_inv, sigma_0, mu0_sig_prior);
         Eigen::VectorXd mu0_update_mean = mu0_update_cov * post::calc_mean_mu_0(matern_inv, o_store[0], sigma_0);
 
@@ -173,8 +157,8 @@ void ar_model::sample() const {
         //beta update
 
         Eigen::MatrixXd beta_update_cov = post::calc_cov_beta(X,w_full_cov_inv, beta_sig_prior);
-        Eigen::VectorXd beta_update_mean = beta_update_cov * post::calc_mean_beta(X, w_full_cov_inv, o_store, rho);
 
+        Eigen::VectorXd beta_update_mean = beta_update_cov * post::calc_mean_beta(X, w_full_cov_inv, o_store, rho);
         beta_sampler.setCovar(beta_update_cov);
         beta_sampler.setMean(beta_update_mean);
         beta = beta_sampler.samples(1);
@@ -200,6 +184,7 @@ void ar_model::sample() const {
 
 
 //         sigma calculation
+
         std::pair sig_eps_update_ab = post::calc_a_b_sigma_eps(ab_eps_prior.first, ab_eps_prior.second, N, T, y, o_store);
         sig_eps_sampler.param(std::gamma_distribution<double>::param_type(sig_eps_update_ab.first, 1./sig_eps_update_ab.second));
         sigma_eps = 1./sig_eps_sampler(generator);
@@ -225,6 +210,32 @@ void ar_model::sample() const {
         sig_0_scalar->set_value(sigma_0);
 //
 
+        //phi MH step
+        {
+            phi_sampler.param(std::normal_distribution<double>::param_type(phi, sqrt(phi_cand_var)));
+            double phi_cand = phi_sampler(generator);
+            double u = unif(generator);
+            std::cout<< "candidate phi: " << phi_cand << std::endl;
+            if (phi_cand > 0) {
+                double ratio = post::target_ratio_phi(phi, phi_cand, coord_mat, o_store, X, beta, mu_0, rho, sigma_w,
+                                                      sigma_0, ab_phi_prior, nu);
+                std::cout << "ratio: " << ratio << std::endl;
+                std::cout << "u:  " << u << std::endl;
+                if (ratio > u || ratio > 1) {
+                    phi = phi_cand;
+                    matern_cov = calc_matern_mat(coord_mat, phi, nu);
+                    matern_inv = matern_cov.inverse();
+                }
+            }
+        }
+        std::cout << "phi: "<<phi <<std::endl;
+        scalar::scalar* phi_scalar= phi_stream.add_scalar();
+        phi_scalar->set_iter(i);
+        phi_scalar->set_value(phi);
+
+        //covariance update
+
+        w_full_cov_inv =  matern_inv/sigma_w;
 
         std::cout<< "Iteration " << i << " finished" << std::endl;
     }
@@ -234,6 +245,7 @@ void ar_model::sample() const {
     proto::serialize_o(o_stream);
     proto::serialize_mu0(mu_0_stream);
     proto::serialize_rho(rho_stream);
+    proto::serialize_phi(phi_stream);
     proto::serialize_sig_0(sig_0_stream);
     proto::serialize_sig_w(sig_w_stream);
     proto::serialize_sig_eps(sig_eps_stream);
