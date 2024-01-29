@@ -6,7 +6,7 @@ setwd("/users/daniel/desktop/ar_gibbs")
 x = seq(0,100,0.01);
 dev.off()
 
-plot(x, dinvgamma(x,2,2), type = 'l', c(0,1))
+plot(x, dgamma(x,2,1), type = 'l', c(0,10))
 
 ##### new proto files ##### 
 
@@ -120,7 +120,7 @@ mean(sig_0)
 
 ### phi
 dev.off()
-plot(phi[0:5000], type = 'l', col = 'grey')
+plot(phi, type = 'l', col = 'grey')
 mean(phi)
 
 

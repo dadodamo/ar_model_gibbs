@@ -30,7 +30,7 @@ int main(int argc,char* argv[]) {
 
 
     // all fixed parameters
-    double phi = 1;
+    double phi = 2;
     double nu = 0.5;
     double rho = 0.5;
 
@@ -91,6 +91,7 @@ int main(int argc,char* argv[]) {
     Eigen::MatrixXd matern_cov = Eigen::MatrixXd::Zero(N,N);
     // calculation of covar matrix
     std::vector<coord> coord_store_vec(10);
+    std::vector<coord> std_coord_store_vec(10);
     {
         // hard code 10 coords
         coord c1(10, 40);
@@ -104,10 +105,40 @@ int main(int argc,char* argv[]) {
         coord c9(22, 5);
         coord c10(8, 5);
         coord_store_vec = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10};
+
+        //standardization of coordinates
+            //mean
+        double mean_lat = 0;
+        double mean_long = 0;
+
+        for (int i = 0; i < coord_store_vec.size(); ++i) {
+            mean_lat += coord_store_vec[i].get_x();
+            mean_long += coord_store_vec[i].get_y();
+        }
+        mean_lat = mean_lat/coord_store_vec.size();
+        mean_long = mean_long/coord_store_vec.size();
+
+            // variance
+        double stddev_lat = 0;
+        double stddev_long = 0;
+        for (int i = 0; i < coord_store_vec.size(); ++i) {
+            stddev_lat += pow((coord_store_vec[i].get_x() - mean_lat),2);
+            stddev_long += pow((coord_store_vec[i].get_y() - mean_long),2);
+
+        }
+        stddev_lat = sqrt(stddev_lat/coord_store_vec.size());
+        stddev_long = sqrt(stddev_long/coord_store_vec.size());
+
+        for (int i = 0; i < coord_store_vec.size(); ++i) {
+            double std_lat = (coord_store_vec[i].get_x()-mean_lat)/stddev_lat;
+            double std_long = (coord_store_vec[i].get_y()-mean_long)/stddev_long;
+            std_coord_store_vec[i].set_x(std_lat);
+            std_coord_store_vec[i].set_y(std_long);
+        }
         //matern correlation matrix
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
-                double dist = eucl_dist(coord_store_vec[i], coord_store_vec[j]);
+                double dist = eucl_dist(std_coord_store_vec[i], std_coord_store_vec[j]);
                 matern_cov(i, j) = matern(dist, phi, nu);
             }
         }
@@ -172,8 +203,7 @@ int main(int argc,char* argv[]) {
 
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-
-    ar_model a(yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
+    ar_model a(yt_store_vec, xt_store_vec, std_coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
                sigma_w, sigma_0, phi, nu);
     a.init();
     a.standardize();

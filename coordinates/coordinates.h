@@ -23,10 +23,10 @@ public:
     double get_y() const{
         return y;
     };
-    void set_x(float& x){
+    void set_x(double& x){
         this->x = x;
     };
-    void set_y(float& y) {
+    void set_y(double& y) {
         this->y = y;
     }
 };

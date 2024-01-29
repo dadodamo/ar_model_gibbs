@@ -156,7 +156,7 @@ void ar_model::sample() {
         phi_sampler.param(std::normal_distribution<double>::param_type(phi, sqrt(phi_cand_var)));
         double phi_cand = phi_sampler(generator);
         double u = unif(generator);
-        if (phi_cand > 0 && phi_cand < 1) {
+        if (phi_cand > 0) {
             double ratio = post::target_ratio_phi(phi, phi_cand, coord_mat, o_store, X, beta, mu_0, rho, sigma_w,
                                                   sigma_0, ab_phi_prior, nu);
 
