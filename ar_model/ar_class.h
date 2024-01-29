@@ -20,8 +20,6 @@
 
 class ar_model {
 private:
-    //iterations
-    unsigned int n_iter;
     //dimensions
     unsigned int T;
     unsigned int N;
@@ -60,11 +58,11 @@ private:
     double mu0_sig_prior = 1.;
 
     //inverse gamma group
-    std::pair<double, double> ab_eps_prior = {2,1};
-    std::pair<double, double> ab_w_prior = {2,1};
-    std::pair<double, double> ab_0_prior = {2,1};
+    std::pair<double, double> ab_eps_prior = {2,4};
+    std::pair<double, double> ab_w_prior = {2,4};
+    std::pair<double, double> ab_0_prior = {2,4};
     // phi prior and candidate variance
-    std::pair<double, double> ab_phi_prior = {1,  5};
+    std::pair<double, double> ab_phi_prior = {2,  2};
     double phi_cand_var = 0.1;
 
     // matrices
@@ -74,9 +72,18 @@ private:
     Eigen::MatrixXd w_full_cov_inv;
 
     // algo options
-    bool use_cholesky = false;
+    bool use_cholesky = true;
     u_int64_t seed = 1;
     std::mt19937 generator = std::mt19937(1);
+
+    Eigen::VectorXd std_mean_y;
+    double std_var_y;
+    std::vector<Eigen::VectorXd> std_mean_X;
+    std::vector<double> std_var_X;
+    double std_mean_coord;
+    double std_var_coord;
+    double phi_accept_rate = 0;
+    double iter_count = 0;
 
 
 
@@ -110,11 +117,14 @@ public:
     );
 
     void init();
-
+    void standardize();
     void sample();
     void write_curr_state();
 
     void serialize();
+    double get_acceptance_rate(){
+        return phi_accept_rate/iter_count;
+    }
 };
 
 #endif

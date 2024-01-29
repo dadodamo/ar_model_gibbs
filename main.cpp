@@ -8,6 +8,8 @@
 #include "ar_model/ar_class.h"
 #include<random>
 #include"debug_functions/debug.h"
+#include"cmake-build-debug/proto/ydata.pb.h"
+#include"protocpp/serialize.h"
 
 
 
@@ -28,8 +30,8 @@ int main(int argc,char* argv[]) {
 
 
     // all fixed parameters
-    double phi = 0.1;
-    double nu = 2.;
+    double phi = 1;
+    double nu = 0.5;
     double rho = 0.5;
 
     // mu and beta
@@ -98,8 +100,8 @@ int main(int argc,char* argv[]) {
         coord c5(5, 40);
         coord c6(9, 20);
         coord c7(15, 25);
-        coord c8(40, 10);
-        coord c9(35, 5);
+        coord c8(20, 10);
+        coord c9(22, 5);
         coord c10(8, 5);
         coord_store_vec = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10};
         //matern correlation matrix
@@ -151,12 +153,22 @@ int main(int argc,char* argv[]) {
 
     // Y_t data calculation
     std::vector<Eigen::VectorXd> yt_store_vec(T);
+    y_data::full_y y_stream;
     {
         for (int t = 0; t < T; t++) {
             yt_store_vec[t] = ot_store_vec[t+1] + epst_store_vec[t];
+            std::vector<double> y_vec(yt_store_vec[t].begin(), yt_store_vec[t].end());
+            y_stream.add_vec_t()->mutable_vec_value()->Add(y_vec.begin(), y_vec.end());
         }
     }
+
+    proto::serialize_y(y_stream);
     ///////// DATA GENERATION END /////////
+
+    ///////// DATA PARSING ///////////
+
+
+    ///////// DATA PARSING END ////////
 
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
@@ -164,14 +176,17 @@ int main(int argc,char* argv[]) {
     ar_model a(yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
                sigma_w, sigma_0, phi, nu);
     a.init();
+    a.standardize();
     unsigned int n_iter = 5000;
     for (int i = 0; i < n_iter; ++i) {
         a.sample();
         a.write_curr_state();
-        std::cout << "Iteration " << i << " finished" << std::endl;
+        if(i % 100 == 0) {
+            std::cout << "Iteration " << i << " finished" << std::endl;
+        }
     }
+    std::cout << "acceptance rate: " << a.get_acceptance_rate() << std::endl;
     a.serialize();
-
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Time elapsed = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 

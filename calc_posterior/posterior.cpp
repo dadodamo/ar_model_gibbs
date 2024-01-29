@@ -128,15 +128,17 @@ Eigen::VectorXd post::calc_mean_beta( const std::vector<Eigen::MatrixXd>& x_stor
             sum_curr += (o_store[t] - rho*o_store[t-1] - x_store[t-1]*beta).transpose()*curr_matern_inv *(o_store[t] - rho*o_store[t-1] - x_store[t-1]*beta);
         }
 
-//        double cand_lkhd = exp(-1*pow(cand_phi,2) / 2*var_prior_phi) * pow(cand_matern_mat.determinant(),-1*x_store.size()/2.) * exp(- 1/sigma_w * sum_cand) * pow(cand_matern_mat.determinant(), -0.5)
-//                * exp(-1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *cand_matern_inv*(o_store[0] - mu_0));
-        double log_cand_lkhd = (ab_phi_prior.first - 1)*log(cand_phi) - ab_phi_prior.second*cand_phi  - (x_store.size()/2.)*log(cand_matern_mat.determinant()) - 1/2*sigma_w * sum_cand -0.5* log(cand_matern_mat.determinant())
-                 -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *cand_matern_inv*(o_store[0] - mu_0);
+//        double log_cand_lkhd = (ab_phi_prior.first - 1)*log(cand_phi) - ab_phi_prior.second*cand_phi  - (x_store.size()/2.)*log(cand_matern_mat.determinant()) - 1/2*sigma_w * sum_cand -0.5* log(cand_matern_mat.determinant())
+//                 -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *cand_matern_inv*(o_store[0] - mu_0);
 
-        double log_curr_lkhd =  (ab_phi_prior.first - 1)*log(curr_phi) - ab_phi_prior.second*curr_phi -1/2*sigma_w * sum_curr -0.5* log(curr_matern_mat.determinant())
-                -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *curr_matern_inv*(o_store[0] - mu_0);
-        std::cout << "log_cand_lkhd: "<< log_cand_lkhd<< std::endl;
-        std::cout << "log_curr_lkhd: "<< log_curr_lkhd << std::endl;
+        double log_cand_lkhd =  - (x_store.size()/2.)*log(cand_matern_mat.determinant()) - (1/(2*sigma_w)) * sum_cand -0.5* log(cand_matern_mat.determinant())
+                               -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *cand_matern_inv*(o_store[0] - mu_0);
+
+//        double log_curr_lkhd =  (ab_phi_prior.first - 1)*log(curr_phi) - ab_phi_prior.second*curr_phi - (x_store.size()/2.)*log(curr_matern_mat.determinant())  -1/2*sigma_w * sum_curr -0.5* log(curr_matern_mat.determinant())
+//                -1/(2*sigma_0) *(o_store[0] - mu_0).transpose() *curr_matern_inv*(o_store[0] - mu_0);
+
+        double log_curr_lkhd =   - (x_store.size()/2.)*log(curr_matern_mat.determinant())  - (1/(2*sigma_w)) * sum_curr -0.5* log(curr_matern_mat.determinant())
+                                -(1/(2*sigma_0)) *(o_store[0] - mu_0).transpose() *curr_matern_inv*(o_store[0] - mu_0);
         return exp(log_cand_lkhd - log_curr_lkhd);
     }
 

@@ -5,8 +5,8 @@ setwd("/users/daniel/desktop/ar_gibbs")
 ##### gamma plotting #####
 x = seq(0,100,0.01);
 dev.off()
-plot(x, dinvgamma(x,1, 100), type = 'l', xlim = c(0,10))
 
+plot(x, dinvgamma(x,2,2), type = 'l', c(0,1))
 
 ##### new proto files ##### 
 
@@ -31,7 +31,7 @@ rho <- sapply(list_rho, function(x){x});
 phi <- sapply(list_phi, function(x){x});
 sig_w <- sapply(list_sigma_w, function(x){x});
 sig_eps <- sapply(list_sigma_eps, function(x){x});
-sigma_0 <- sapply(list_sigma_0, function(x){x});
+sig_0 <- sapply(list_sigma_0, function(x){x});
 o <- sapply(list_o, function(x){x$vec});
 o <- sapply(o, function(x){x$vec_value});
 
@@ -50,10 +50,12 @@ dev.off()
 par(mfrow = c(5, 1))
 par(mar = c(2, 4, 2, 1))
 for (i in 1:5) {
-  plot(beta[i,1000:5000], type='l' ,main = "betas", col = 'grey')
-  lines(1:4000, rep(beta_true[i], 4000), col = "green", type = 'l')  
+  # Create the plot
+  plot(beta[i, 1000:5000], type = 'l', main = "", col = 'grey', ylab = bquote(beta[.(i)]))
+  
+  # Add the true beta line
+  lines(1:4000, rep(beta_true[i], 4000), col = "green", type = 'l', lwd = 2)  
 }
-
 
 dev.off()
 
@@ -64,8 +66,8 @@ dev.off()
 
 ## read rho file
 dev.off()
-plot(rho[1000:5000], type = 'l', col = 'grey')
-lines(1:4000, rep(0.5, 4000), type = 'l', col = 'green')
+plot(rho[1000:5000], type = 'l', col = 'grey', ylim = c(0.45, 0.55), ylab = "", main = expression(rho), xlab = "Iteration")
+lines(1:4000, rep(0.5, 4000), type = 'l', col = 'green', lwd = 2)
 
 
 
@@ -90,8 +92,8 @@ dev.off()
 par(mfrow = c(5, 2))
 par(mar = c(2, 4, 2, 1))
 for (i in 1:10) {
-  plot(mu0[i,1000:5000], main = paste("mu ", i) ,  type = 'l', col = 'grey');
-  lines(1:4000, rep(mu_0_true[i], 4000), type = 'l', col = "green");
+  plot(mu0[i,1000:5000], ylab = bquote(paste(mu[0], "[", .(i), "]")) ,  type = 'l', col = 'grey');
+  lines(1:4000, rep(mu_0_true[i], 4000), type = 'l',col = 'green', lwd = 2);
 }
 
 
@@ -99,25 +101,26 @@ for (i in 1:10) {
 
 ## sig_eps
 dev.off()
-plot(sig_eps[1000:5000], type = 'l', col = 'grey')
-lines(1:4000, rep(1, 4000), type = 'l', col = "green")
+plot(sig_eps[1000:5000], type = 'l', col = 'grey', main =  bquote(sigma[epsilon]^2), ylab = "", xlab = "Iteration")
+lines(1:4000, rep(0.9, 4000), type = 'l', col = "green", lwd = 2)
 mean(sig_eps)
 
 
 ## sig_w
 dev.off()
-plot(sig_w[1000:5000], type = 'l', main = "true value = 1", col ='grey', ylim = c(0, 10))
-lines(1:4000, rep(1, 4000), type = 'l', col = "green")
+plot(sig_w[1000:5000], type = 'l',main =  bquote(sigma[w]^2), col ='grey', ylim = c(0, 1) ,xlab = "Iteration" , ylab = "")
+lines(1:4000, rep(0.1, 4000), type = 'l', col = "green")
 mean(sig_w)
 
 ## sig_0
 dev.off()
-plot(sig_0[1000:5000],col = 'grey' ,type = 'l', main = "true value = 1, est. mean = 1.0053", ylim =c(0,10))
+plot(sig_0[1000:5000],col = 'grey' ,type = 'l', main = bquote(sigma[0]^2), xlab = "Iteration", ylab = "")
 lines(1:4000, rep(1, 4000), type = 'l', col = "green")
 mean(sig_0)
 
 ### phi
-plot(phi[1000:5000], type = 'l', col = 'grey')
+dev.off()
+plot(phi[0:5000], type = 'l', col = 'grey')
 mean(phi)
 
 

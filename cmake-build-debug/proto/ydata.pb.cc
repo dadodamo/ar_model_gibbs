@@ -57,15 +57,12 @@ static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_ydata_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_ydata_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::y_data::vector, _has_bits_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::y_data::vector, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::y_data::vector, t_),
   PROTOBUF_FIELD_OFFSET(::y_data::vector, vec_value_),
-  0,
-  ~0u,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::y_data::full_y, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -74,8 +71,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_ydata_2eproto::offsets[] PROTO
   PROTOBUF_FIELD_OFFSET(::y_data::full_y, vec_t_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, sizeof(::y_data::vector)},
-  { 9, -1, sizeof(::y_data::full_y)},
+  { 0, -1, sizeof(::y_data::vector)},
+  { 6, -1, sizeof(::y_data::full_y)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -84,9 +81,9 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_ydata_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\013ydata.proto\022\006y_data\"&\n\006vector\022\t\n\001t\030\001 \002"
-  "(\005\022\021\n\tvec_value\030\002 \003(\002\"\'\n\006full_y\022\035\n\005vec_t"
-  "\030\001 \003(\0132\016.y_data.vector"
+  "\n\013ydata.proto\022\006y_data\"\033\n\006vector\022\021\n\tvec_v"
+  "alue\030\002 \003(\001\"\'\n\006full_y\022\035\n\005vec_t\030\001 \003(\0132\016.y_"
+  "data.vector"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_ydata_2eproto_deps[1] = {
 };
@@ -96,7 +93,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_yda
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_ydata_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_ydata_2eproto = {
-  false, false, descriptor_table_protodef_ydata_2eproto, "ydata.proto", 102,
+  false, false, descriptor_table_protodef_ydata_2eproto, "ydata.proto", 91,
   &descriptor_table_ydata_2eproto_once, descriptor_table_ydata_2eproto_sccs, descriptor_table_ydata_2eproto_deps, 2, 0,
   schemas, file_default_instances, TableStruct_ydata_2eproto::offsets,
   file_level_metadata_ydata_2eproto, 2, file_level_enum_descriptors_ydata_2eproto, file_level_service_descriptors_ydata_2eproto,
@@ -110,13 +107,6 @@ namespace y_data {
 
 class vector::_Internal {
  public:
-  using HasBits = decltype(std::declval<vector>()._has_bits_);
-  static void set_has_t(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static bool MissingRequiredFields(const HasBits& has_bits) {
-    return ((has_bits[0] & 0x00000001) ^ 0x00000001) != 0;
-  }
 };
 
 vector::vector(::PROTOBUF_NAMESPACE_ID::Arena* arena)
@@ -128,15 +118,12 @@ vector::vector(::PROTOBUF_NAMESPACE_ID::Arena* arena)
 }
 vector::vector(const vector& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
-      _has_bits_(from._has_bits_),
       vec_value_(from.vec_value_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  t_ = from.t_;
   // @@protoc_insertion_point(copy_constructor:y_data.vector)
 }
 
 void vector::SharedCtor() {
-  t_ = 0;
 }
 
 vector::~vector() {
@@ -171,39 +158,28 @@ void vector::Clear() {
   (void) cached_has_bits;
 
   vec_value_.Clear();
-  t_ = 0;
-  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* vector::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required int32 t = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_t(&has_bits);
-          t_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // repeated float vec_value = 2;
+      // repeated double vec_value = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 21)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           ptr -= 1;
           do {
             ptr += 1;
-            _internal_add_vec_value(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
-            ptr += sizeof(float);
+            _internal_add_vec_value(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
+            ptr += sizeof(double);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<21>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<17>(ptr));
         } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_vec_value(), ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedDoubleParser(_internal_mutable_vec_value(), ptr, ctx);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -222,7 +198,6 @@ const char* vector::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
     }  // switch
   }  // while
 success:
-  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -236,17 +211,10 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cached_has_bits = _has_bits_[0];
-  // required int32 t = 1;
-  if (cached_has_bits & 0x00000001u) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_t(), target);
-  }
-
-  // repeated float vec_value = 2;
+  // repeated double vec_value = 2;
   for (int i = 0, n = this->_internal_vec_value_size(); i < n; i++) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_vec_value(i), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_vec_value(i), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -261,20 +229,14 @@ size_t vector::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:y_data.vector)
   size_t total_size = 0;
 
-  // required int32 t = 1;
-  if (_internal_has_t()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_t());
-  }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated float vec_value = 2;
+  // repeated double vec_value = 2;
   {
     unsigned int count = static_cast<unsigned int>(this->_internal_vec_value_size());
-    size_t data_size = 4UL * count;
+    size_t data_size = 8UL * count;
     total_size += 1 *
                   ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_vec_value_size());
     total_size += data_size;
@@ -312,9 +274,6 @@ void vector::MergeFrom(const vector& from) {
   (void) cached_has_bits;
 
   vec_value_.MergeFrom(from.vec_value_);
-  if (from._internal_has_t()) {
-    _internal_set_t(from._internal_t());
-  }
 }
 
 void vector::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -332,16 +291,13 @@ void vector::CopyFrom(const vector& from) {
 }
 
 bool vector::IsInitialized() const {
-  if (_Internal::MissingRequiredFields(_has_bits_)) return false;
   return true;
 }
 
 void vector::InternalSwap(vector* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
   vec_value_.InternalSwap(&other->vec_value_);
-  swap(t_, other->t_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata vector::GetMetadata() const {
@@ -535,7 +491,6 @@ void full_y::CopyFrom(const full_y& from) {
 }
 
 bool full_y::IsInitialized() const {
-  if (!::PROTOBUF_NAMESPACE_ID::internal::AllAreInitialized(vec_t_)) return false;
   return true;
 }
 

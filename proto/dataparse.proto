@@ -1,0 +1,25 @@
+syntax = "proto2";
+package dataparse;
+
+message vector {
+  repeated double vec_value = 1;
+}
+message matrix {
+  repeated vector m = 1;
+}
+
+message data_t {
+  required vector response = 1;
+  required matrix x = 2;
+}
+
+message data{
+  repeated data_t data_vector = 1;
+  repeated coordinates coord_vector = 2;
+}
+
+message coordinates {
+  required double longitude = 1;
+  required double latitude = 2;
+}
+

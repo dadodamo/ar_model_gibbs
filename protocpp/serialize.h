@@ -13,6 +13,7 @@
 
 namespace proto {
     void serialize(sampler_data::samples& sample_stream);
+    void serialize_y(y_data::full_y& y_stream);
 }
 
 #endif //AR_GIBBS_SERIALIZE_H

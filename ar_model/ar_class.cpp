@@ -34,7 +34,7 @@ void ar_model::init() {
     sig_0_sampler = std::gamma_distribution<double> (ab_0_prior.first, ab_0_prior.second);
     phi_sampler = std::normal_distribution<double>(0,sqrt(phi_cand_var));
 
-    phi = 1;
+    phi = 1.;
     beta = beta_sampler.samples(1);
     rho = rho_sampler(generator);
     mu_0 = mu0_sampler.samples(1);
@@ -60,6 +60,10 @@ void ar_model::init() {
 void ar_model::serialize() {
     proto::serialize(sample_stream);
 }
+
+void ar_model::standardize() {
+    // std_mean_y
+};
 
 void ar_model::write_curr_state(){
     sampler_data::matrix* o_matrix = sample_stream.add_o();
@@ -152,22 +156,20 @@ void ar_model::sample() {
         phi_sampler.param(std::normal_distribution<double>::param_type(phi, sqrt(phi_cand_var)));
         double phi_cand = phi_sampler(generator);
         double u = unif(generator);
-        std::cout<< "candidate phi: " << phi_cand << std::endl;
-        if (phi_cand > 0) {
+        if (phi_cand > 0 && phi_cand < 1) {
             double ratio = post::target_ratio_phi(phi, phi_cand, coord_mat, o_store, X, beta, mu_0, rho, sigma_w,
                                                   sigma_0, ab_phi_prior, nu);
-            std::cout << "ratio: " << ratio << std::endl;
-            std::cout << "u:  " << u << std::endl;
+
             if (ratio > u || ratio > 1) {
                 phi = phi_cand;
                 matern_cov = calc_matern_mat(coord_mat, phi, nu);
                 matern_inv = matern_cov.inverse();
+                phi_accept_rate++;
             }
         }
     }
     //covariance update
 
     w_full_cov_inv =  matern_inv/sigma_w;
-
-
+    iter_count++;
 }
