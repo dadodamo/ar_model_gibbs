@@ -344,25 +344,44 @@ class full_y PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kVecTFieldNumber = 1,
+    kVecYFieldNumber = 1,
+    kFittedValuesFieldNumber = 2,
   };
-  // repeated .y_data.vector vec_t = 1;
-  int vec_t_size() const;
+  // repeated .y_data.vector vec_y = 1;
+  int vec_y_size() const;
   private:
-  int _internal_vec_t_size() const;
+  int _internal_vec_y_size() const;
   public:
-  void clear_vec_t();
-  ::y_data::vector* mutable_vec_t(int index);
+  void clear_vec_y();
+  ::y_data::vector* mutable_vec_y(int index);
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::y_data::vector >*
-      mutable_vec_t();
+      mutable_vec_y();
   private:
-  const ::y_data::vector& _internal_vec_t(int index) const;
-  ::y_data::vector* _internal_add_vec_t();
+  const ::y_data::vector& _internal_vec_y(int index) const;
+  ::y_data::vector* _internal_add_vec_y();
   public:
-  const ::y_data::vector& vec_t(int index) const;
-  ::y_data::vector* add_vec_t();
+  const ::y_data::vector& vec_y(int index) const;
+  ::y_data::vector* add_vec_y();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::y_data::vector >&
-      vec_t() const;
+      vec_y() const;
+
+  // required .y_data.vector fitted_values = 2;
+  bool has_fitted_values() const;
+  private:
+  bool _internal_has_fitted_values() const;
+  public:
+  void clear_fitted_values();
+  const ::y_data::vector& fitted_values() const;
+  ::y_data::vector* release_fitted_values();
+  ::y_data::vector* mutable_fitted_values();
+  void set_allocated_fitted_values(::y_data::vector* fitted_values);
+  private:
+  const ::y_data::vector& _internal_fitted_values() const;
+  ::y_data::vector* _internal_mutable_fitted_values();
+  public:
+  void unsafe_arena_set_allocated_fitted_values(
+      ::y_data::vector* fitted_values);
+  ::y_data::vector* unsafe_arena_release_fitted_values();
 
   // @@protoc_insertion_point(class_scope:y_data.full_y)
  private:
@@ -371,8 +390,10 @@ class full_y PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::y_data::vector > vec_t_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::y_data::vector > vec_y_;
+  ::y_data::vector* fitted_values_;
   friend struct ::TableStruct_ydata_2eproto;
 };
 // ===================================================================
@@ -437,43 +458,126 @@ vector::mutable_vec_value() {
 
 // full_y
 
-// repeated .y_data.vector vec_t = 1;
-inline int full_y::_internal_vec_t_size() const {
-  return vec_t_.size();
+// repeated .y_data.vector vec_y = 1;
+inline int full_y::_internal_vec_y_size() const {
+  return vec_y_.size();
 }
-inline int full_y::vec_t_size() const {
-  return _internal_vec_t_size();
+inline int full_y::vec_y_size() const {
+  return _internal_vec_y_size();
 }
-inline void full_y::clear_vec_t() {
-  vec_t_.Clear();
+inline void full_y::clear_vec_y() {
+  vec_y_.Clear();
 }
-inline ::y_data::vector* full_y::mutable_vec_t(int index) {
-  // @@protoc_insertion_point(field_mutable:y_data.full_y.vec_t)
-  return vec_t_.Mutable(index);
+inline ::y_data::vector* full_y::mutable_vec_y(int index) {
+  // @@protoc_insertion_point(field_mutable:y_data.full_y.vec_y)
+  return vec_y_.Mutable(index);
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::y_data::vector >*
-full_y::mutable_vec_t() {
-  // @@protoc_insertion_point(field_mutable_list:y_data.full_y.vec_t)
-  return &vec_t_;
+full_y::mutable_vec_y() {
+  // @@protoc_insertion_point(field_mutable_list:y_data.full_y.vec_y)
+  return &vec_y_;
 }
-inline const ::y_data::vector& full_y::_internal_vec_t(int index) const {
-  return vec_t_.Get(index);
+inline const ::y_data::vector& full_y::_internal_vec_y(int index) const {
+  return vec_y_.Get(index);
 }
-inline const ::y_data::vector& full_y::vec_t(int index) const {
-  // @@protoc_insertion_point(field_get:y_data.full_y.vec_t)
-  return _internal_vec_t(index);
+inline const ::y_data::vector& full_y::vec_y(int index) const {
+  // @@protoc_insertion_point(field_get:y_data.full_y.vec_y)
+  return _internal_vec_y(index);
 }
-inline ::y_data::vector* full_y::_internal_add_vec_t() {
-  return vec_t_.Add();
+inline ::y_data::vector* full_y::_internal_add_vec_y() {
+  return vec_y_.Add();
 }
-inline ::y_data::vector* full_y::add_vec_t() {
-  // @@protoc_insertion_point(field_add:y_data.full_y.vec_t)
-  return _internal_add_vec_t();
+inline ::y_data::vector* full_y::add_vec_y() {
+  // @@protoc_insertion_point(field_add:y_data.full_y.vec_y)
+  return _internal_add_vec_y();
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::y_data::vector >&
-full_y::vec_t() const {
-  // @@protoc_insertion_point(field_list:y_data.full_y.vec_t)
-  return vec_t_;
+full_y::vec_y() const {
+  // @@protoc_insertion_point(field_list:y_data.full_y.vec_y)
+  return vec_y_;
+}
+
+// required .y_data.vector fitted_values = 2;
+inline bool full_y::_internal_has_fitted_values() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || fitted_values_ != nullptr);
+  return value;
+}
+inline bool full_y::has_fitted_values() const {
+  return _internal_has_fitted_values();
+}
+inline void full_y::clear_fitted_values() {
+  if (fitted_values_ != nullptr) fitted_values_->Clear();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::y_data::vector& full_y::_internal_fitted_values() const {
+  const ::y_data::vector* p = fitted_values_;
+  return p != nullptr ? *p : reinterpret_cast<const ::y_data::vector&>(
+      ::y_data::_vector_default_instance_);
+}
+inline const ::y_data::vector& full_y::fitted_values() const {
+  // @@protoc_insertion_point(field_get:y_data.full_y.fitted_values)
+  return _internal_fitted_values();
+}
+inline void full_y::unsafe_arena_set_allocated_fitted_values(
+    ::y_data::vector* fitted_values) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(fitted_values_);
+  }
+  fitted_values_ = fitted_values;
+  if (fitted_values) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:y_data.full_y.fitted_values)
+}
+inline ::y_data::vector* full_y::release_fitted_values() {
+  _has_bits_[0] &= ~0x00000001u;
+  ::y_data::vector* temp = fitted_values_;
+  fitted_values_ = nullptr;
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::y_data::vector* full_y::unsafe_arena_release_fitted_values() {
+  // @@protoc_insertion_point(field_release:y_data.full_y.fitted_values)
+  _has_bits_[0] &= ~0x00000001u;
+  ::y_data::vector* temp = fitted_values_;
+  fitted_values_ = nullptr;
+  return temp;
+}
+inline ::y_data::vector* full_y::_internal_mutable_fitted_values() {
+  _has_bits_[0] |= 0x00000001u;
+  if (fitted_values_ == nullptr) {
+    auto* p = CreateMaybeMessage<::y_data::vector>(GetArena());
+    fitted_values_ = p;
+  }
+  return fitted_values_;
+}
+inline ::y_data::vector* full_y::mutable_fitted_values() {
+  // @@protoc_insertion_point(field_mutable:y_data.full_y.fitted_values)
+  return _internal_mutable_fitted_values();
+}
+inline void full_y::set_allocated_fitted_values(::y_data::vector* fitted_values) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  if (message_arena == nullptr) {
+    delete fitted_values_;
+  }
+  if (fitted_values) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(fitted_values);
+    if (message_arena != submessage_arena) {
+      fitted_values = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, fitted_values, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  fitted_values_ = fitted_values;
+  // @@protoc_insertion_point(field_set_allocated:y_data.full_y.fitted_values)
 }
 
 #ifdef __GNUC__
