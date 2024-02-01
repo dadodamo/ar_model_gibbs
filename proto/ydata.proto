@@ -6,5 +6,6 @@ message vector {
 }
 
 message full_y {
-    repeated vector vec_t = 1;
+    repeated vector vec_y = 1;
+    required vector fitted_values = 2;
 }

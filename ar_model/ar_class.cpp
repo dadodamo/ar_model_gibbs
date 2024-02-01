@@ -54,11 +54,26 @@ void ar_model::init() {
     matern_cov = calc_matern_mat(coord_mat, phi, nu);
     matern_inv = matern_cov.inverse();
     w_full_cov_inv =  matern_inv/sigma_w;
+
+    // PMCC variables
+    pmcc_y_sampler = std::normal_distribution<double>(0,1);
+    sampled_y = Eigen::VectorXd::Zero(N*T);
+    sampled_y_sum = Eigen::VectorXd::Zero(N*T);
+    sampled_y_sum_sq = Eigen::VectorXd::Zero(N*T);
 }
 
 
 void ar_model::serialize() {
     proto::serialize(sample_stream);
+
+    std::vector<double> fit_y_vec(fitted_y_values.begin(), fitted_y_values.end());
+    for (int t = 0; t < y.size(); ++t) {
+        std::vector<double> y_vec(y[t].begin(), y[t].end());
+        y_stream.add_vec_y()->mutable_vec_value()->Add(y_vec.begin(), y_vec.end());
+    }
+
+    y_stream.mutable_fitted_values()->mutable_vec_value()->Add(fit_y_vec.begin(), fit_y_vec.end());
+    proto::serialize_y(y_stream);
 }
 
 void ar_model::standardize() {
@@ -83,6 +98,7 @@ void ar_model::write_curr_state(){
     sample_stream.add_sigma_w(sigma_w);
     sample_stream.add_mu_0()->mutable_vec_value()->Add(mu0_vec.begin(), mu0_vec.end());
     sample_stream.add_beta()->mutable_vec_value()->Add(beta_vec.begin(), beta_vec.end());
+//    sample_stream.add_pmcc_y()->mutable_vec_value()->Add.(sampled_y.begin(), sampled_y.end());
 
 }
 
@@ -172,4 +188,36 @@ void ar_model::sample() {
 
     w_full_cov_inv =  matern_inv/sigma_w;
     iter_count++;
+}
+
+void ar_model::track_pmcc(){
+    Eigen::VectorXd o_conc = Eigen::VectorXd::Zero(N*T);
+    for (int i = 0; i < o_store.size()-1; ++i) {
+        o_conc.segment(i*N, N) = o_store[i+1];
+    }
+    for (int i = 0; i < N*T; ++i) {
+        pmcc_y_sampler.param(std::normal_distribution<double>::param_type(o_conc(i), sqrt(sigma_eps) ));
+        sampled_y(i) = pmcc_y_sampler(generator);
+    }
+    sampled_y_sum += sampled_y;
+    Eigen::VectorXd temp_sq = sampled_y.array().square();
+    sampled_y_sum_sq += temp_sq;
+};
+
+double ar_model::calc_pmcc(){
+    // create full vector of y
+    Eigen::VectorXd full_y = Eigen::VectorXd::Zero(N*T);
+    for(int i = 0; i < y.size(); ++i){
+        full_y.segment(i*N, N) = y[i];
+    }
+    // calculate variance for each chain
+    fitted_y_values = sampled_y_sum/iter_count;
+    Eigen::VectorXd pmcc_mean_sq = fitted_y_values.array().square();
+
+    Eigen::VectorXd pmcc_var = (iter_count * pmcc_mean_sq  - 2* fitted_y_values.cwiseProduct(sampled_y_sum) + sampled_y_sum_sq)/iter_count;
+    double pmcc = 0;
+    for (int i = 0; i < N*T ; ++i) {
+        pmcc += pow(fitted_y_values(i) - full_y(i), 2) + pmcc_var(i);
+    }
+    return pmcc;
 }

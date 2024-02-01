@@ -8,7 +8,7 @@
 #include "ar_model/ar_class.h"
 #include<random>
 #include"debug_functions/debug.h"
-#include"cmake-build-debug/proto/ydata.pb.h"
+// #include"cmake-build-debug/proto/ydata.pb.h"
 #include"protocpp/serialize.h"
 
 
@@ -19,7 +19,7 @@ int main(int argc,char* argv[]) {
 
     // algo options
     u_int64_t seed = 112083918;
-    bool b = false;
+    bool b = true;
 
     // data generation of model using T = 299, N = 10, p = 5
     // can be rewritten with generic param, as class+methods or function
@@ -49,9 +49,9 @@ int main(int argc,char* argv[]) {
 //    }
 
     // model variance components
-    double sigma_eps = .9;
-    double sigma_w = .1;
-    double sigma_0 = 1.;
+    double sigma_eps = .1;
+    double sigma_w = .9;
+    double sigma_0 = .1;
 
     //priors, to pass if needed
 //    double sigma_mu_0_prior = 1;
@@ -167,6 +167,8 @@ int main(int argc,char* argv[]) {
         }
     };
 
+
+
     // Eps data generation
     std::vector<Eigen::VectorXd> epst_store_vec(T);
     {
@@ -184,17 +186,13 @@ int main(int argc,char* argv[]) {
 
     // Y_t data calculation
     std::vector<Eigen::VectorXd> yt_store_vec(T);
-    y_data::full_y y_stream;
     {
         for (int t = 0; t < T; t++) {
             yt_store_vec[t] = ot_store_vec[t+1] + epst_store_vec[t];
-            std::vector<double> y_vec(yt_store_vec[t].begin(), yt_store_vec[t].end());
-            y_stream.add_vec_t()->mutable_vec_value()->Add(y_vec.begin(), y_vec.end());
         }
     }
-
-    proto::serialize_y(y_stream);
     ///////// DATA GENERATION END /////////
+
 
     ///////// DATA PARSING ///////////
 
@@ -211,11 +209,14 @@ int main(int argc,char* argv[]) {
     for (int i = 0; i < n_iter; ++i) {
         a.sample();
         a.write_curr_state();
+        a.track_pmcc();
         if(i % 100 == 0) {
             std::cout << "Iteration " << i << " finished" << std::endl;
         }
+
     }
     std::cout << "acceptance rate: " << a.get_acceptance_rate() << std::endl;
+    std::cout << a.calc_pmcc() << std::endl;
     a.serialize();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Time elapsed = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
