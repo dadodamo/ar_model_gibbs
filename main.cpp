@@ -8,7 +8,7 @@
 #include "ar_model/ar_class.h"
 #include<random>
 #include"debug_functions/debug.h"
-#include"cmake-build-debug/proto/ydata.pb.h"
+// #include"cmake-build-debug/proto/ydata.pb.h"
 #include"protocpp/serialize.h"
 
 
@@ -19,7 +19,7 @@ int main(int argc,char* argv[]) {
 
     // algo options
     u_int64_t seed = 112083918;
-    bool b = false;
+    bool b = true;
 
     // data generation of model using T = 299, N = 10, p = 5
     // can be rewritten with generic param, as class+methods or function
@@ -30,7 +30,7 @@ int main(int argc,char* argv[]) {
 
 
     // all fixed parameters
-    double phi = 1;
+    double phi = 2;
     double nu = 0.5;
     double rho = 0.5;
 
@@ -49,9 +49,9 @@ int main(int argc,char* argv[]) {
 //    }
 
     // model variance components
-    double sigma_eps = .9;
-    double sigma_w = .1;
-    double sigma_0 = 1.;
+    double sigma_eps = .1;
+    double sigma_w = .9;
+    double sigma_0 = .1;
 
     //priors, to pass if needed
 //    double sigma_mu_0_prior = 1;
@@ -91,6 +91,7 @@ int main(int argc,char* argv[]) {
     Eigen::MatrixXd matern_cov = Eigen::MatrixXd::Zero(N,N);
     // calculation of covar matrix
     std::vector<coord> coord_store_vec(10);
+    std::vector<coord> std_coord_store_vec(10);
     {
         // hard code 10 coords
         coord c1(10, 40);
@@ -104,10 +105,40 @@ int main(int argc,char* argv[]) {
         coord c9(22, 5);
         coord c10(8, 5);
         coord_store_vec = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10};
+
+        //standardization of coordinates
+            //mean
+        double mean_lat = 0;
+        double mean_long = 0;
+
+        for (int i = 0; i < coord_store_vec.size(); ++i) {
+            mean_lat += coord_store_vec[i].get_x();
+            mean_long += coord_store_vec[i].get_y();
+        }
+        mean_lat = mean_lat/coord_store_vec.size();
+        mean_long = mean_long/coord_store_vec.size();
+
+            // variance
+        double stddev_lat = 0;
+        double stddev_long = 0;
+        for (int i = 0; i < coord_store_vec.size(); ++i) {
+            stddev_lat += pow((coord_store_vec[i].get_x() - mean_lat),2);
+            stddev_long += pow((coord_store_vec[i].get_y() - mean_long),2);
+
+        }
+        stddev_lat = sqrt(stddev_lat/coord_store_vec.size());
+        stddev_long = sqrt(stddev_long/coord_store_vec.size());
+
+        for (int i = 0; i < coord_store_vec.size(); ++i) {
+            double std_lat = (coord_store_vec[i].get_x()-mean_lat)/stddev_lat;
+            double std_long = (coord_store_vec[i].get_y()-mean_long)/stddev_long;
+            std_coord_store_vec[i].set_x(std_lat);
+            std_coord_store_vec[i].set_y(std_long);
+        }
         //matern correlation matrix
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
-                double dist = eucl_dist(coord_store_vec[i], coord_store_vec[j]);
+                double dist = eucl_dist(std_coord_store_vec[i], std_coord_store_vec[j]);
                 matern_cov(i, j) = matern(dist, phi, nu);
             }
         }
@@ -136,6 +167,8 @@ int main(int argc,char* argv[]) {
         }
     };
 
+
+
     // Eps data generation
     std::vector<Eigen::VectorXd> epst_store_vec(T);
     {
@@ -153,17 +186,13 @@ int main(int argc,char* argv[]) {
 
     // Y_t data calculation
     std::vector<Eigen::VectorXd> yt_store_vec(T);
-    y_data::full_y y_stream;
     {
         for (int t = 0; t < T; t++) {
             yt_store_vec[t] = ot_store_vec[t+1] + epst_store_vec[t];
-            std::vector<double> y_vec(yt_store_vec[t].begin(), yt_store_vec[t].end());
-            y_stream.add_vec_t()->mutable_vec_value()->Add(y_vec.begin(), y_vec.end());
         }
     }
-
-    proto::serialize_y(y_stream);
     ///////// DATA GENERATION END /////////
+
 
     ///////// DATA PARSING ///////////
 
@@ -172,8 +201,7 @@ int main(int argc,char* argv[]) {
 
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-
-    ar_model a(yt_store_vec, xt_store_vec, coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
+    ar_model a(yt_store_vec, xt_store_vec, std_coord_store_vec, ot_store_vec, beta, mu_0, rho, sigma_eps,
                sigma_w, sigma_0, phi, nu);
     a.init();
     a.standardize();
@@ -181,11 +209,14 @@ int main(int argc,char* argv[]) {
     for (int i = 0; i < n_iter; ++i) {
         a.sample();
         a.write_curr_state();
+        a.track_pmcc();
         if(i % 100 == 0) {
             std::cout << "Iteration " << i << " finished" << std::endl;
         }
+
     }
     std::cout << "acceptance rate: " << a.get_acceptance_rate() << std::endl;
+    std::cout << a.calc_pmcc() << std::endl;
     a.serialize();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Time elapsed = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;

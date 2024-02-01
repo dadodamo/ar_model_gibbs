@@ -9,6 +9,7 @@
 #include "../cmake-build-debug/proto/ydata.pb.h"
 #include "../cmake-build-debug/proto/paramdata.pb.h"
 #include "../protocpp/serialize.h"
+
 #include <fstream>
 #include<string>
 #include "../calc_posterior/posterior.h"
@@ -62,7 +63,7 @@ private:
     std::pair<double, double> ab_w_prior = {2,4};
     std::pair<double, double> ab_0_prior = {2,4};
     // phi prior and candidate variance
-    std::pair<double, double> ab_phi_prior = {2,  2};
+    std::pair<double, double> ab_phi_prior = {8,  4};
     double phi_cand_var = 0.1;
 
     // matrices
@@ -85,6 +86,12 @@ private:
     double phi_accept_rate = 0;
     double iter_count = 0;
 
+    // PMCC variables
+    std::normal_distribution<double> pmcc_y_sampler = std::normal_distribution<double>(0,1);
+    Eigen::VectorXd sampled_y;
+    Eigen::VectorXd sampled_y_sum;
+    Eigen::VectorXd sampled_y_sum_sq;
+    Eigen::VectorXd fitted_y_values;
 
 
     //samplers
@@ -99,6 +106,7 @@ private:
     std::uniform_real_distribution<double> unif = std::uniform_real_distribution<double>(0,1);
 
     sampler_data::samples sample_stream;
+    y_data::full_y y_stream;
 
 public:
     ar_model(
@@ -122,6 +130,9 @@ public:
     void write_curr_state();
 
     void serialize();
+    void track_pmcc();
+    double calc_pmcc();
+
     double get_acceptance_rate(){
         return phi_accept_rate/iter_count;
     }
