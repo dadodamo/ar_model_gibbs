@@ -32,16 +32,6 @@ private:
     std::vector<coord> coordinates;
     double nu;
 
-    //debug
-    std::vector<Eigen::VectorXd> o_store_true;
-    Eigen::VectorXd beta_true;
-    double rho_true;
-    Eigen::VectorXd mu_0_true;
-    double phi_true;
-    double sigma_eps_true;
-    double sigma_w_true;
-    double sigma_0_true;
-
     //sampled parameters
     std::vector<Eigen::VectorXd> o_store;
     Eigen::VectorXd beta;
@@ -63,7 +53,7 @@ private:
     std::pair<double, double> ab_w_prior = {2,4};
     std::pair<double, double> ab_0_prior = {2,4};
     // phi prior and candidate variance
-    std::pair<double, double> ab_phi_prior = {8,  4};
+    std::pair<double, double> ab_phi_prior = {2,  4};
     double phi_cand_var = 0.1;
 
     // matrices
@@ -108,19 +98,14 @@ private:
     sampler_data::samples sample_stream;
     y_data::full_y y_stream;
 
+    // NA handling
+    std::vector<std::pair<int, int>> na_values;
+
 public:
     ar_model(
             std::vector<Eigen::VectorXd>& y_store,
             std::vector<Eigen::MatrixXd>& x_store,
             std::vector<coord>& coord_vec,
-            std::vector<Eigen::VectorXd>& ot_store,
-            Eigen::VectorXd& beta,
-            Eigen::VectorXd& mu_0,
-            double& rho,
-            double& sigma_eps_true,
-            double& sigma_w_true,
-            double& sigma_0_true,
-            double& phi_true,
             double& nu
     );
 
