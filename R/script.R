@@ -52,9 +52,9 @@ par(mar = c(2, 4, 2, 1))
 for (i in 1:5) {
   # Create the plot
   plot(beta[i, 1000:5000], type = 'l', main = "", col = 'grey', ylab = bquote(beta[.(i)]))
-  
+  mean(beta[i,])
   # Add the true beta line
-  lines(1:4000, rep(beta_true[i], 4000), col = "green", type = 'l', lwd = 2)  
+  #lines(1:4000, rep(beta_true[i], 4000), col = "green", type = 'l', lwd = 2)  
 }
 
 dev.off()
@@ -166,16 +166,16 @@ mean <- c(
   10.2209
 )
 mean2 <- c(
-  -7.14982,
-  6.82703,
-  -1.31385,
-  -9.71581,
-  9.54782,
-  0.260374,
-  -8.24077,
-  -1.04074,
-  3.25668,
-  -16.2563
+  0.799816,
+  2.05917,
+  0.767974,
+  0.722412,
+  0.146886,
+  -1.35127,
+  2.82488,
+  -0.877237,
+  -2.75092,
+  1.8037
 )
 par(mfrow = c(5, 2))
 par(mar = c(2, 4, 2, 1))
