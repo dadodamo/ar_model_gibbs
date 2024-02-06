@@ -3,18 +3,9 @@
 
 ar_model::ar_model(std::vector<Eigen::VectorXd> &y_store,
                    std::vector<Eigen::MatrixXd> &x_store, std::vector<coord> &coord_vec,
-                   std::vector<Eigen::VectorXd>& ot_store, Eigen::VectorXd& beta, Eigen::VectorXd& mu_0, double& rho,
-                   double& sigma_eps_true, double& sigma_w_true, double& sigma_0_true, double& phi_true, double& nu) :
+                   double& nu) :
         y(y_store), X(x_store),
         coordinates(coord_vec),
-        o_store_true(ot_store),
-        beta_true(beta),
-        mu_0_true(mu_0),
-        rho_true(rho),
-        sigma_eps_true(sigma_eps_true),
-        sigma_w_true(sigma_w_true),
-        sigma_0_true(sigma_0_true),
-        phi_true(phi_true),
         nu(nu)
 {
     T = (X).size();
@@ -60,6 +51,16 @@ void ar_model::init() {
     sampled_y = Eigen::VectorXd::Zero(N*T);
     sampled_y_sum = Eigen::VectorXd::Zero(N*T);
     sampled_y_sum_sq = Eigen::VectorXd::Zero(N*T);
+
+    // NA handling
+    for (int t = 0; t < T; ++t) {
+        for (int n = 0; n < N; ++n) {
+            if(std::isnan(y[t](n))) {
+                na_values.emplace_back(t, n);
+                std::cout << t << "  " << n << std::endl;
+            }
+        }
+    }
 }
 
 
@@ -104,6 +105,19 @@ void ar_model::write_curr_state(){
 
 void ar_model::sample() {
 
+    // sample y's that are NA
+    Eigen::VectorXd o_conc = Eigen::VectorXd::Zero(N*T);
+    for (int i = 0; i < o_store.size()-1; ++i) {
+        o_conc.segment(i*N, N) = o_store[i+1];
+    }
+    for (int i = 0; i < N*T; ++i) {
+        pmcc_y_sampler.param(std::normal_distribution<double>::param_type(o_conc(i), sqrt(sigma_eps) ));
+        sampled_y(i) = pmcc_y_sampler(generator);
+    }
+    for (std::pair<int,int>& p : na_values) {
+        y[p.first](p.second) = sampled_y(p.first * N + p.second);
+    }
+
 //        o_store update
 
     //update 0 zero first
@@ -114,12 +128,14 @@ void ar_model::sample() {
     o_store[0] = o_sampler.samples(1);
 
     //  now update the rest
+
     for (int t = 1; t < T; ++t) {
         Eigen::MatrixXd ot_update_cov = post::calc_cov_eff_t(sigma_eps,w_full_cov_inv, rho );
         Eigen::VectorXd ot_update_mean = ot_update_cov* post::calc_mean_eff_t(y[t-1],X[t-1], X[t],w_full_cov_inv, o_store[t-1], o_store[t+1], beta, rho, sigma_eps);
         o_sampler.setMean(ot_update_mean);
         o_sampler.setCovar(ot_update_cov);
         o_store[t] = o_sampler.samples(1);
+
     }
 //        //update last in o_store
     Eigen::MatrixXd oT_update_cov = post::calc_cov_eff_T(sigma_eps,w_full_cov_inv);;
@@ -191,14 +207,6 @@ void ar_model::sample() {
 }
 
 void ar_model::track_pmcc(){
-    Eigen::VectorXd o_conc = Eigen::VectorXd::Zero(N*T);
-    for (int i = 0; i < o_store.size()-1; ++i) {
-        o_conc.segment(i*N, N) = o_store[i+1];
-    }
-    for (int i = 0; i < N*T; ++i) {
-        pmcc_y_sampler.param(std::normal_distribution<double>::param_type(o_conc(i), sqrt(sigma_eps) ));
-        sampled_y(i) = pmcc_y_sampler(generator);
-    }
     sampled_y_sum += sampled_y;
     Eigen::VectorXd temp_sq = sampled_y.array().square();
     sampled_y_sum_sq += temp_sq;
