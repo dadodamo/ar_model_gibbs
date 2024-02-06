@@ -2,6 +2,3 @@
 .vscode
 .Rhistory
 .RData
-/cmake-build-debug/samples_serialized.bin
-/cmake-build-debug/y_serialized.bin
-
